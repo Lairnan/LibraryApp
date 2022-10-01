@@ -5,6 +5,15 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <ApplicationIcon />
+        <Win32Resource />
+        <AnalysisLevel>latest</AnalysisLevel>
+        <StartupObject />
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="Screenshot_1.png" />
+    </ItemGroup>
 
 </Project>

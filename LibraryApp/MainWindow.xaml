@@ -1,12 +1,113 @@
-﻿<Window x:Class="LibraryApp.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LibraryApp"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:LibraryApp"
+    x:Class="LibraryApp.MainWindow"
+    mc:Ignorable="d"
+    Title="MainWindow" 
+    Height="450" 
+    Width="800">
+    <Window.DataContext>
+        <local:ChangeCurrentPage/>
+    </Window.DataContext>
+    
+    <!--
+    AllowsTransparency="True"
+    WindowStyle="None"
+    -->
+   
+    <Window.Resources>
+        <Style x:Key="BtnUp" TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Margin" Value="3 0"/>
+            <Setter Property="Foreground" Value="#fff"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border 
+                            Background="#4C37B1D4"
+                            CornerRadius="5">
+                            <ContentPresenter
+                                HorizontalAlignment="Center">
+                                <ContentPresenter.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="3"
+                                        Color="#FF2314aa"
+                                        RenderingBias="Quality"
+                                        ShadowDepth="2"/>
+                                </ContentPresenter.Effect>
+                            </ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FFE29E26"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF85E412"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <!--<Window.Template>
+        <ControlTemplate TargetType="{x:Type Window}">
+            <Border
+                CornerRadius="10"
+                Background="#333">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Image 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0 0 150 0"
+                            MaxHeight="32"
+                            MaxWidth="32"
+                            Source="{TemplateBinding Icon}"/>
+                        <TextBlock
+                            Foreground="White"
+                            Margin="5 5"
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            FontFamily="Comic sans MS"
+                            Text="{TemplateBinding Title}"/>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Margin="5 5"
+                            HorizontalAlignment="Right">
+                            <Button
+                                Style="{StaticResource BtnUp}"
+                                Content="-"
+                                Click="BtnMin"/>
+                            <Button
+                                Style="{StaticResource BtnUp}"
+                                Content="-+"
+                                Click="BtnMinMax"/>
+                            <Button
+                                Style="{StaticResource BtnUp}"
+                                Content="X"
+                                Click="BtnClose"/>
+                        </StackPanel>
+                    </Grid>
+                    <ContentPresenter Grid.Row="1"/>
+                </Grid>
+            </Border>
+        </ControlTemplate>
+    </Window.Template>-->
+    <Grid
+        Background="#333">
+        <Frame
+            NavigationUIVisibility="Hidden"
+            Content="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </Window>
