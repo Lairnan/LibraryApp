@@ -22,7 +22,10 @@ namespace LibraryApp
                 this.MouseLeftButtonUp += windowMoves.DragMoveLeftBtnUp;
                 this.MouseMove += windowMoves.DragMoveMouseMove;
             };
+            Back = BtnBack;
         }
+
+        public static Button Back = null!;
 
         private void BtnMin(object sender, RoutedEventArgs e)
         {
@@ -37,6 +40,11 @@ namespace LibraryApp
         private void BtnClose(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void BackBtnClick(object sender, RoutedEventArgs e)
+        {
+            PageService.GoToBack();
         }
     }
 }

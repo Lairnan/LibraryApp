@@ -106,7 +106,17 @@
     </Window.Template>-->
     <Grid
         Background="#333">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button
+            x:Name="BtnBack"
+            HorizontalAlignment="Left"
+            Content="&lt;- Back"
+            Click="BackBtnClick"/>
         <Frame
+            Grid.Row="1"
             NavigationUIVisibility="Hidden"
             Content="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>

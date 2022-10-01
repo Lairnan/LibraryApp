@@ -22,11 +22,14 @@ public class PageService
         OnPageChanged?.Invoke(page);
         
         _history.Push(page);
+
+        MainWindow.Back.IsEnabled = CanGoToBack;
     }
 
     public void GoToBack()
     {
         _history.Pop();
         OnPageChanged?.Invoke(_history.Peek());
+        MainWindow.Back.IsEnabled = CanGoToBack;
     }
 }
