@@ -9,10 +9,13 @@ namespace LibraryApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal static PageService PageService = null!;
+        private PageService PageService = null!;
         public MainWindow()
         {
             InitializeComponent();
+            
+            PageService = new PageService();
+            PageService.OnPageChanged += page => ThisPage.Content = page;
             
             Loaded += (_, _) =>
             {

@@ -71,4 +71,19 @@ public class WindowMoves
             _ => _window.WindowState
         };
     }
+    
+    public void BtnMin(object sender, RoutedEventArgs e)
+    {
+        _window.WindowState = WindowState.Minimized;
+    }
+
+    public void BtnMinMax(object sender, RoutedEventArgs e)
+    {
+        _window.WindowState = _window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+    }
+
+    public void BtnClose(object sender, RoutedEventArgs e)
+    {
+        Application.Current.Shutdown();
+    }
 }
