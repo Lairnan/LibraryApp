@@ -6,12 +6,13 @@
     xmlns:local="clr-namespace:LibraryApp"
     x:Class="LibraryApp.MainWindow"
     mc:Ignorable="d"
-    Title="LibraryApp" 
+    Title="Школьная библиотека" 
     AllowsTransparency="True"
     WindowStyle="None"
     ResizeMode="CanResize"
     WindowStartupLocation="CenterOwner"
     WindowState="Normal"
+    Icon="Images/LibraryIcon.png"
     Height="450"
     MinHeight="300"
     Width="800"
@@ -81,20 +82,22 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid>
-                        <Image 
+                        <StackPanel 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Margin="0 0 150 0"
-                            MaxHeight="32"
-                            MaxWidth="32"
-                            Source="{TemplateBinding Icon}"/>
-                        <TextBlock
-                            Foreground="White"
-                            Margin="5 5"
-                            HorizontalAlignment="Center"
-                            FontSize="18"
-                            FontFamily="Comic sans MS"
-                            Text="{TemplateBinding Title}"/>
+                            Orientation="Horizontal">
+                            <Image 
+                                Margin="5 5"
+                                MaxHeight="32"
+                                MaxWidth="32"
+                                Source="{TemplateBinding Icon}"/>
+                            <TextBlock
+                                Foreground="White"
+                                Margin="5 5"
+                                FontSize="18"
+                                FontFamily="Comic sans MS"
+                                Text="{TemplateBinding Title}"/>
+                        </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
                             Margin="5 5"

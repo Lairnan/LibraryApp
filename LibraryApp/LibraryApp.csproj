@@ -21,6 +21,9 @@
       <Resource Include="Images\Library.jpg">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+      <None Remove="Images\LibraryIcon.png" />
+      <Resource Include="Images\LibraryIcon.png" />
+      <None Remove="Images\LibraryIcon.ico" />
     </ItemGroup>
 
 </Project>
