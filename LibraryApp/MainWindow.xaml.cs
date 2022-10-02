@@ -16,7 +16,10 @@ namespace LibraryApp
             
             PageService = new PageService();
             PageService.OnPageChanged += page => ThisPage.Content = page;
-            
+
+            this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+
             Loaded += (_, _) =>
             {
                 PageService.Navigate(new TestPage(PageService));

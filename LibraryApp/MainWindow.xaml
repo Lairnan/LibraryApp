@@ -6,11 +6,22 @@
     xmlns:local="clr-namespace:LibraryApp"
     x:Class="LibraryApp.MainWindow"
     mc:Ignorable="d"
-    Title="MainWindow" 
-    Height="450" 
+    Title="LibraryApp" 
     AllowsTransparency="True"
     WindowStyle="None"
-    Width="800">
+    ResizeMode="CanResize"
+    WindowStartupLocation="CenterOwner"
+    WindowState="Normal"
+    Height="450"
+    MinHeight="300"
+    Width="800"
+    MinWidth="600">
+    
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CaptionHeight="0"
+            ResizeBorderThickness="5"/>
+    </WindowChrome.WindowChrome>
     
     <!--
     AllowsTransparency="True"
@@ -59,7 +70,11 @@
         <ControlTemplate TargetType="{x:Type Window}">
             <Border
                 CornerRadius="10"
-                Background="#333">
+                BorderBrush="Aqua"
+                BorderThickness="3">
+                <Border.Background>
+                    <ImageBrush ImageSource="Images/Library.jpg"/>
+                </Border.Background>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -103,8 +118,10 @@
             </Border>
         </ControlTemplate>
     </Window.Template>
-    <Grid
-        Background="#333">
+    <Grid>
+        <!-- <Grid.Background> -->
+        <!--     <ImageBrush ImageSource="Images/Library.jpg"/> -->
+        <!-- </Grid.Background> -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -112,6 +129,7 @@
         <Button
             x:Name="BtnBack"
             Margin="5"
+            Padding="5 2"
             FontSize="16"
             FontFamily="Comic sans MS"
             HorizontalAlignment="Left"
@@ -120,6 +138,8 @@
         <Frame
             x:Name="ThisPage"
             Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

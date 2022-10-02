@@ -16,4 +16,11 @@
       <None Remove="Screenshot_1.png" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Images\Library.jpg" />
+      <Resource Include="Images\Library.jpg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
 </Project>
