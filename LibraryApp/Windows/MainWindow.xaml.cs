@@ -1,8 +1,11 @@
-﻿using System;
+﻿using System.Linq;
+using LibraryApp.Pages;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
-namespace LibraryApp
+namespace LibraryApp.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -13,20 +16,22 @@ namespace LibraryApp
         public MainWindow()
         {
             InitializeComponent();
+
+
             
             PageService = new PageService();
             PageService.OnPageChanged += page => ThisPage.Content = page;
 
-            this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+            //this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth - 10;
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
 
             Loaded += (_, _) =>
             {
-                PageService.Navigate(new TestPage(PageService));
+                PageService.Start();
                 var windowMoves = new WindowMoves(this);
+                this.MouseMove += windowMoves.DragMoveMouseMove;
                 this.MouseLeftButtonDown += windowMoves.DragMoveLeftBtnDown;
                 this.MouseLeftButtonUp += windowMoves.DragMoveLeftBtnUp;
-                this.MouseMove += windowMoves.DragMoveMouseMove;
             };
             Back = BtnBack;
         }
@@ -51,6 +56,11 @@ namespace LibraryApp
         private void BackBtnClick(object sender, RoutedEventArgs e)
         {
             PageService.GoToBack();
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
         }
     }
 }

@@ -1,0 +1,32 @@
+﻿<Page x:Class="LibraryApp.Pages.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LibraryApp.Pages"
+      mc:Ignorable="d">
+    <StackPanel>
+        <ListView
+            x:Name="ListViewItems"
+            Height="200">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="40" Header="Id" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Width="100" Header="Login" DisplayMemberBinding="{Binding Login}"/>
+                    <GridViewColumn Width="100" Header="Password" DisplayMemberBinding="{Binding Password}"/>
+                    <GridViewColumn Width="40" Header="RoleId" DisplayMemberBinding="{Binding Role.Id}"/>
+                    <GridViewColumn Width="100" Header="RoleName" DisplayMemberBinding="{Binding Role.Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button
+            HorizontalAlignment="Center"
+            Content="Перейти"
+            Click="NextBtnClick"/>
+        <Button 
+            HorizontalAlignment="Center"
+            Margin="0 5"
+            Content="Выйти"
+            Click="ExitBtnClick" Cursor="Hand"/>
+    </StackPanel>
+</Page>

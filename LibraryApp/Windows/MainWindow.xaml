@@ -4,7 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:LibraryApp"
-    x:Class="LibraryApp.MainWindow"
+    x:Class="LibraryApp.Windows.MainWindow"
     mc:Ignorable="d"
     Title="Школьная библиотека" 
     AllowsTransparency="True"
@@ -12,23 +12,19 @@
     ResizeMode="CanResize"
     WindowStartupLocation="CenterOwner"
     WindowState="Normal"
-    Icon="Images/LibraryIcon.png"
+    Icon="../Images/LibraryIcon.png"
     Height="450"
     MinHeight="300"
     Width="800"
-    MinWidth="600">
-    
+    MinWidth="600"
+    MouseDown="Window_MouseDown">
+
     <WindowChrome.WindowChrome>
         <WindowChrome
             CaptionHeight="0"
             ResizeBorderThickness="5"/>
     </WindowChrome.WindowChrome>
     
-    <!--
-    AllowsTransparency="True"
-    WindowStyle="None"
-    -->
-   
     <Window.Resources>
         <Style x:Key="BtnUp" TargetType="{x:Type Button}">
             <Setter Property="Width" Value="40"/>
@@ -70,18 +66,17 @@
     <Window.Template>
         <ControlTemplate TargetType="{x:Type Window}">
             <Border
-                CornerRadius="10"
-                BorderBrush="Aqua"
-                BorderThickness="3">
+                CornerRadius="5">
                 <Border.Background>
-                    <ImageBrush ImageSource="Images/Library.jpg"/>
+                    <ImageBrush ImageSource="../Images/Library.jpg"/>
                 </Border.Background>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Grid>
+                    <Grid
+                        x:Name="GridHeader">
                         <StackPanel 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -122,9 +117,6 @@
         </ControlTemplate>
     </Window.Template>
     <Grid>
-        <!-- <Grid.Background> -->
-        <!--     <ImageBrush ImageSource="Images/Library.jpg"/> -->
-        <!-- </Grid.Background> -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -134,6 +126,7 @@
             Margin="5"
             Padding="5 2"
             FontSize="16"
+            Cursor="Hand"
             FontFamily="Comic sans MS"
             HorizontalAlignment="Left"
             Content="&lt;- Back"

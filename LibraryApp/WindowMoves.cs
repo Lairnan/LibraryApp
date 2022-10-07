@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace LibraryApp;
 
@@ -64,10 +66,10 @@ public class WindowMoves
 
     private void SwitchState()
     {
-        _window.WindowState = _window.WindowState switch
+        _window.WindowState = _window switch
         {
-            WindowState.Normal => WindowState.Maximized,
-            WindowState.Maximized => WindowState.Normal,
+            {WindowState: WindowState.Normal} => WindowState.Maximized,
+            {WindowState: WindowState.Maximized} => WindowState.Normal,
             _ => _window.WindowState
         };
     }

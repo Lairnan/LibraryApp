@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -10,6 +9,13 @@
         <Win32Resource />
         <AnalysisLevel>latest</AnalysisLevel>
         <StartupObject />
+        <TargetFramework>net6.0-windows</TargetFramework>
+		<StartupObject>LibraryApp.Program</StartupObject>
+        <LangVersion>10</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <Optimize>True</Optimize>
     </PropertyGroup>
 
     <ItemGroup>

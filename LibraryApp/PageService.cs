@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using LibraryApp.Pages;
+using LibraryApp.Windows;
 
 namespace LibraryApp;
 
@@ -23,6 +26,23 @@ public class PageService
         
         _history.Push(page);
 
+        MainWindow.Back.IsEnabled = CanGoToBack;
+    }
+
+    public void Start()
+    {
+        OnPageChanged?.Invoke(new Authorization(this));
+        MainWindow.Back.Visibility = Visibility.Collapsed;
+        MainWindow.Back.IsEnabled = CanGoToBack;
+    }
+
+    public void Enter()
+    {
+        var page = new MainPage(this);
+        OnPageChanged?.Invoke(page);
+        if (_history.Count == 0)
+            _history.Push(page);
+        MainWindow.Back.Visibility = Visibility.Visible;
         MainWindow.Back.IsEnabled = CanGoToBack;
     }
 
