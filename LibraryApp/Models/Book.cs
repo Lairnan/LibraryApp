@@ -14,5 +14,6 @@ public class Book
     public string LBC { get; set; }
     public string ISBN { get; set; }
     public int Pages { get; set; }
+    public City City { get; set; }
     public DateTime ReleaseDate { get; set; }
 }

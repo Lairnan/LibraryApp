@@ -7,7 +7,7 @@ internal class ConnectionDb : IDisposable
 {
     public ConnectionDb()
     {
-        SqlConnection = new SqlConnection(@"Server=(localdb)\MSSQLLocalDB;Initial Catalog=Library;Integration Security=true;");
+        SqlConnection = new SqlConnection(@"Server=(localdb)\MSSQLLocalDB;Database=Library");
         SqlConnection.Open();
     }
 

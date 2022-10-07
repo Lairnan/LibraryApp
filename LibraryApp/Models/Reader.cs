@@ -11,5 +11,7 @@ public class Reader
     public Type Type { get; set; }
     public DateTime BirthDate { get; set; }
     public string Address { get; set; }
-    public int Phone { get; set; }
+    public long Phone { get; set; }
+    public string Login { get; set; }
+    public string Password { get; set; }
 }
