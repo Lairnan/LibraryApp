@@ -26,7 +26,7 @@
                 Style="{DynamicResource CaptchaText}"
                 FontSize="20"
                 Foreground="White"
-                Text="523qWes">
+                Text="">
                 <TextBlock.RenderTransform>
                     <MatrixTransform Matrix="1.5 -0.03 0.5 1 4 -7"/>
                 </TextBlock.RenderTransform>
@@ -40,7 +40,7 @@
                 Style="{DynamicResource CaptchaLab}"
                 Visibility="Collapsed"
                 Content="Обновить"
-                MouseLeftButtonDown="UpdateCaptchaDown" Cursor="Hand"/>
+                MouseLeftButtonDown="UpdateCaptchaDown" />
         </UniformGrid>
         <StackPanel 
             Margin="0 5"
@@ -48,11 +48,14 @@
             Orientation="Horizontal">
             <Button
                 Content="Войти"
-                Click="AuthBtnClick"/>
+                Click="AuthBtnClick"
+                IsDefault="True"
+                Focusable="False"/>
             <Button
                 Margin="10 0 0 0"
                 Content="Зарегистрироваться"
-                Click="RegBtnClick" Cursor="Hand"/>
+                Click="RegBtnClick" 
+                Cursor="Hand"/>
         </StackPanel>
     </StackPanel>
 </Page>

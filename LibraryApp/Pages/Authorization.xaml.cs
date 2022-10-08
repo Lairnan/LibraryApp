@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace LibraryApp.Pages
@@ -14,17 +12,13 @@ namespace LibraryApp.Pages
     /// </summary>
     public partial class Authorization : Page
     {
-        private PageService _pageService;
+        private readonly PageService _pageService;
 
         public Authorization(PageService pageService)
         {
             this._pageService = pageService;
             InitializeComponent();
-            
-            ListUsers = TestUsers.GetUsersCollection().ToList();
         }
-
-        private List<Users> ListUsers;
 
         private int _attemps = 0;
 
@@ -57,24 +51,59 @@ namespace LibraryApp.Pages
             }
         }
 
-        private void AuthBtnClick(object sender, RoutedEventArgs e)
+        private bool CheckAttempts()
         {
-            if (_attemps > 3)
+            if (_attemps <= 3) return true;
+            if (string.IsNullOrWhiteSpace(CaptchaTextBox.Text))
             {
-                if (!_isEnabled)
-                {
-                    MessageBox.Show("Время ввода капчи вышло");
-                    CaptchaGenerate();
-                    return;
-                }
-                if (CaptchaTextBox.Text != CaptchaText.Text)
-                {
-                    MessageBox.Show("Капча введена неверно");
-                    CaptchaGenerate();
-                    return;
-                }
+                MessageBox.Show("Поля не могут быть пустыми");
+                CaptchaGenerate();
+                return false;
+            }
+            
+            if (!_isEnabled)
+            {
+                MessageBox.Show("Время ввода капчи вышло");
+                CaptchaGenerate();
+                return false;
             }
 
+            if (CaptchaTextBox.Text == CaptchaText.Text) return true;
+            MessageBox.Show("Капча введена неверно");
+            CaptchaGenerate();
+            return false;
+
+        }
+
+        private async Task<bool> CheckLog(string login, string password)
+        {
+            using var con = await ConnectionDb.ConnectionDbAsync();
+            await using var cmd =
+                new SqlCommand("SELECT * FROM [Readers] WHERE login = @login AND password = @password",
+                    con.SqlConnection);
+            
+            cmd.Parameters.AddWithValue("login", login);
+            cmd.Parameters.AddWithValue("password", password);
+            
+            var reader = await cmd.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                await Task.Delay(500);
+                _pageService.Enter();
+                return true;
+            }
+
+            MessageBox.Show("Неверный логин или пароль");
+            return false;
+        }
+
+        private async void AuthBtnClick(object sender, RoutedEventArgs e)
+        {
+            if (!CheckAttempts())
+            {
+                return;
+            }
+            
             var login = LogBox.Text;
             var password = PassBox.Password;
             if (string.IsNullOrWhiteSpace(login) | string.IsNullOrWhiteSpace(password))
@@ -83,20 +112,7 @@ namespace LibraryApp.Pages
             }
             else
             {
-                if (ListUsers.Any(s => s.Login == login))
-                {
-                    if (ListUsers.Any(s => s.Password == password))
-                    {
-                        _pageService.Enter();
-                        return;
-                    }
-
-                    MessageBox.Show("Неверный пароль");
-                }
-                else
-                {
-                    MessageBox.Show("Неверный логин");
-                }
+                if (await CheckLog(login, password)) return;
             }
 
             if (++_attemps > 2)

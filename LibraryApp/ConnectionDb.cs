@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace LibraryApp;
 
 internal class ConnectionDb : IDisposable
 {
-    public ConnectionDb()
+    public static async Task<ConnectionDb> ConnectionDbAsync()
     {
-        SqlConnection = new SqlConnection(@"Server=(localdb)\MSSQLLocalDB;Database=Library");
-        SqlConnection.Open();
+        var sqlConnection = new SqlConnection(@"Server=(localdb)\MSSQLLocalDB;Database=Library");
+        await sqlConnection.OpenAsync();
+        return new ConnectionDb(sqlConnection);
+    }
+    
+    public ConnectionDb(SqlConnection sqlConnection)
+    {
+        this.SqlConnection = sqlConnection;
     }
 
     public readonly SqlConnection SqlConnection;

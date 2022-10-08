@@ -9,12 +9,11 @@ namespace LibraryApp.Pages
     /// </summary>
     public partial class MainPage : Page
     {
-        private PageService _pageService;
+        private readonly PageService _pageService;
         public MainPage(PageService pageService)
         {
             _pageService = pageService;
             InitializeComponent();
-            ListViewItems.ItemsSource = TestUsers.GetUsersCollection().ToList();
         }
 
         private void ExitBtnClick(object sender, RoutedEventArgs e)
