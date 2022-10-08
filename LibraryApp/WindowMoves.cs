@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using LibraryApp.Windows;
 
 namespace LibraryApp;
 
@@ -66,12 +67,21 @@ public class WindowMoves
 
     private void SwitchState()
     {
-        _window.WindowState = _window switch
+        switch (_window)
         {
-            {WindowState: WindowState.Normal} => WindowState.Maximized,
-            {WindowState: WindowState.Maximized} => WindowState.Normal,
-            _ => _window.WindowState
-        };
+            case {WindowState: WindowState.Normal}:
+                MainWindow.WindowChangeState = WindowState.Maximized;
+                _window.WindowState = WindowState.Maximized;
+                break;
+            case {WindowState: WindowState.Maximized}:
+                MainWindow.WindowChangeState = WindowState.Normal;
+                _window.WindowState = WindowState.Normal;
+                break;
+            default:
+                MainWindow.WindowChangeState = _window.WindowState;
+                _window.WindowState = _window.WindowState;
+                break;
+        }
     }
     
     public void BtnMin(object sender, RoutedEventArgs e)

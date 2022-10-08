@@ -12,31 +12,42 @@ namespace LibraryApp.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        private PageService PageService = null!;
+        private readonly PageService _pageService;
         public MainWindow()
         {
             InitializeComponent();
 
 
             
-            PageService = new PageService();
-            PageService.OnPageChanged += page => ThisPage.Content = page;
+            _pageService = new PageService();
+            _pageService.OnPageChanged += page => ThisPage.Content = page;
 
             //this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth - 10;
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
 
             Loaded += (_, _) =>
             {
-                PageService.Start();
+                _pageService.Start();
                 var windowMoves = new WindowMoves(this);
                 this.MouseMove += windowMoves.DragMoveMouseMove;
                 this.MouseLeftButtonDown += windowMoves.DragMoveLeftBtnDown;
                 this.MouseLeftButtonUp += windowMoves.DragMoveLeftBtnUp;
             };
             Back = BtnBack;
+            Exit = BtnExit;
+            Window = this;
+        }
+
+        internal static Window Window = null!;
+        internal static WindowState WindowChangeState = WindowState.Maximized;
+
+        private void ExitBtnClick(object sender, RoutedEventArgs e)
+        {
+            _pageService.Start();
         }
 
         public static Button Back = null!;
+        public static Button Exit = null!;
 
         private void BtnMin(object sender, RoutedEventArgs e)
         {
@@ -55,7 +66,7 @@ namespace LibraryApp.Windows
 
         private void BackBtnClick(object sender, RoutedEventArgs e)
         {
-            PageService.GoToBack();
+            _pageService.GoToBack();
         }
 
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

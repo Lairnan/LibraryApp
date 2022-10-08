@@ -7,7 +7,7 @@ namespace LibraryApp.Items;
 
 public static class Categories
 {
-    public static IEnumerable<Category> GetCategories()
+    public static IEnumerable<Category> Get()
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
@@ -17,7 +17,7 @@ public static class Categories
             yield return GetCategory(reader);
         }
     }
-    public static async IAsyncEnumerable<Category> GetCategoriesAsync()
+    public static async IAsyncEnumerable<Category> GetAsync()
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);

@@ -7,7 +7,7 @@ namespace LibraryApp.Items;
 
 public static class Authors
 {
-    public static IEnumerable<Author> GetAuthors()
+    public static IEnumerable<Author> Get()
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
@@ -17,7 +17,7 @@ public static class Authors
             yield return GetAuthor(reader);
         }
     }
-    public static async IAsyncEnumerable<Author> GetAuthorsAsync()
+    public static async IAsyncEnumerable<Author> GetAsync()
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);

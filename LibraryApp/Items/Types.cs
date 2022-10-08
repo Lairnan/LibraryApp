@@ -7,7 +7,7 @@ namespace LibraryApp.Items;
 
 public static class Types
 {
-    public static IEnumerable<Type> GetTypes()
+    public static IEnumerable<Type> Get()
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
@@ -17,7 +17,7 @@ public static class Types
             yield return GetType(reader);
         }
     }
-    public static async IAsyncEnumerable<Type> GetTypesAsync()
+    public static async IAsyncEnumerable<Type> GetAsync()
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);

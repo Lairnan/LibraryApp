@@ -7,7 +7,7 @@ namespace LibraryApp.Items;
 
 public static class Genres
 {
-    public static IEnumerable<Genre> GetGenres()
+    public static IEnumerable<Genre> Get()
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
@@ -17,7 +17,7 @@ public static class Genres
             yield return GetGenre(reader);
         }
     }
-    public static async IAsyncEnumerable<Genre> GetGenresAsync()
+    public static async IAsyncEnumerable<Genre> GetAsync()
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);

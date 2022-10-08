@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using LibraryApp.Items;
 using LibraryApp.Models;
+using LibraryApp.Pages.Views;
 
 namespace LibraryApp.Pages
 {
@@ -17,29 +18,11 @@ namespace LibraryApp.Pages
         {
             _pageService = pageService;
             InitializeComponent();
-            GetDates();
-            Lv.ItemsSource = Readers;
         }
 
-        private async void GetDates()
+        private void ShowBooksBtnClick(object sender, RoutedEventArgs e)
         {
-            await foreach (var reader in Items.Readers.GetReadersAsync())
-            {
-                Readers.Add(reader);
-            }
-            Lv.Items.Refresh();
-        }
-
-        private ObservableCollection<Reader> Readers { get; } = new();
-
-        private void ExitBtnClick(object sender, RoutedEventArgs e)
-        {
-            _pageService.Start();
-        }
-
-        private void NextBtnClick(object sender, RoutedEventArgs e)
-        {
-            _pageService.Navigate(new MainPage(_pageService));
+            _pageService.Navigate(new BooksView(_pageService));
         }
     }
 }

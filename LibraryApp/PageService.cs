@@ -31,18 +31,22 @@ public class PageService
 
     public void Start()
     {
+        MainWindow.Window.WindowState = WindowState.Normal;
         OnPageChanged?.Invoke(new Authorization(this));
         MainWindow.Back.Visibility = Visibility.Collapsed;
         MainWindow.Back.IsEnabled = CanGoToBack;
+        MainWindow.Exit.Visibility = Visibility.Collapsed;
     }
 
     public void Enter()
     {
+        MainWindow.Window.WindowState = MainWindow.WindowChangeState;
         var page = new MainPage(this);
         OnPageChanged?.Invoke(page);
         if (_history.Count == 0)
             _history.Push(page);
         MainWindow.Back.Visibility = Visibility.Visible;
+        MainWindow.Exit.Visibility = Visibility.Visible;
         MainWindow.Back.IsEnabled = CanGoToBack;
     }
 

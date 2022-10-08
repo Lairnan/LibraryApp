@@ -8,7 +8,7 @@ namespace LibraryApp.Items;
 
 public static class Books
 {
-    public static IEnumerable<Book> GetBooks()
+    public static IEnumerable<Book> Get()
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
@@ -18,7 +18,7 @@ public static class Books
             yield return GetBook(reader);
         }
     }
-    public static async IAsyncEnumerable<Book> GetBooksAsync()
+    public static async IAsyncEnumerable<Book> GetAsync()
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);

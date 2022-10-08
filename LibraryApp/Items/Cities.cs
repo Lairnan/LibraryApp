@@ -7,7 +7,7 @@ namespace LibraryApp.Items;
 
 public static class Cities
 {
-    public static IEnumerable<City> GetCities()
+    public static IEnumerable<City> Get()
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
@@ -17,7 +17,7 @@ public static class Cities
             yield return GetCity(reader);
         }
     }
-    public static async IAsyncEnumerable<City> GetCitiesAsync()
+    public static async IAsyncEnumerable<City> GetAsync()
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);

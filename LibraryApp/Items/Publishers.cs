@@ -7,7 +7,7 @@ namespace LibraryApp.Items;
 
 public static class Publishers
 {
-    public static IEnumerable<Publisher> GetPublishers()
+    public static IEnumerable<Publisher> Get()
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
@@ -17,7 +17,7 @@ public static class Publishers
             yield return GetPublisher(reader);
         }
     }
-    public static async IAsyncEnumerable<Publisher> GetPublishersAsync()
+    public static async IAsyncEnumerable<Publisher> GetAsync()
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);

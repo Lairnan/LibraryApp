@@ -7,7 +7,7 @@ namespace LibraryApp.Items;
 
 public static class Readers
 {
-    public static IEnumerable<Reader> GetReaders()
+    public static IEnumerable<Reader> Get()
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
@@ -17,7 +17,7 @@ public static class Readers
             yield return GetReader(reader);
         }
     }
-    public static async IAsyncEnumerable<Reader> GetReadersAsync()
+    public static async IAsyncEnumerable<Reader> GetAsync()
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);

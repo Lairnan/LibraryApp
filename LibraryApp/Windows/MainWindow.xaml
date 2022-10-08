@@ -78,7 +78,14 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid
+                        Grid.Row="0"
                         x:Name="GridHeader">
+                        <Menu
+                            Background="Transparent">
+                            <MenuItem Header="Test">
+                                <MenuItem Header="Test2"/>
+                            </MenuItem>
+                        </Menu>
                         <StackPanel 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -123,17 +130,28 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button
-            x:Name="BtnBack"
-            Margin="5"
-            Padding="5 2"
-            FontSize="16"
-            Cursor="Hand"
-            IsTabStop="False"
-            FontFamily="Comic sans MS"
-            HorizontalAlignment="Left"
-            Content="&lt;- Back"
-            Click="BackBtnClick"/>
+        <StackPanel  
+            Margin="0 5"
+            Orientation="Horizontal">
+            <Button
+                x:Name="BtnBack"
+                Margin=" 0 5"
+                Padding="5 2"
+                FontSize="16"
+                Cursor="Hand"
+                IsTabStop="False"
+                FontFamily="Comic sans MS"
+                HorizontalAlignment="Left"
+                Content="&lt;- Back"
+                Click="BackBtnClick"/>
+            <Button 
+                x:Name="BtnExit"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Content="Выйти"
+                Click="ExitBtnClick" 
+                Cursor="Hand"/>
+        </StackPanel>
         <Frame
             x:Name="ThisPage"
             Grid.Row="1"

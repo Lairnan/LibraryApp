@@ -9,7 +9,7 @@ namespace LibraryApp.Items;
 
 public static class Loans
 {
-    public static IEnumerable<Loan> GetLoans()
+    public static IEnumerable<Loan> Get()
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
@@ -19,7 +19,7 @@ public static class Loans
             yield return GetLoan(reader);
         }
     }
-    public static async IAsyncEnumerable<Loan> GetLoansAsync()
+    public static async IAsyncEnumerable<Loan> GetAsync()
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);

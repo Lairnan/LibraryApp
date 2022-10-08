@@ -4,30 +4,69 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:LibraryApp.Pages">
-    <StackPanel>
-        <ListView
-            x:Name="Lv"
-            Height="200">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="40" Header="Id" DisplayMemberBinding="{Binding Id}"/>
-                    <GridViewColumn Width="100" Header="Surname" DisplayMemberBinding="{Binding Surname}"/>
-                    <GridViewColumn Width="100" Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Width="100" Header="Patronymic" DisplayMemberBinding="{Binding Patronymic}"/>
-                    <GridViewColumn Width="100" Header="TypeName" DisplayMemberBinding="{Binding Type.Name}"/>
-                    <GridViewColumn Width="100" Header="Login" DisplayMemberBinding="{Binding Login}"/>
-                    <GridViewColumn Width="100" Header="Password" DisplayMemberBinding="{Binding Password}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button
-            HorizontalAlignment="Center"
-            Content="Перейти"
-            Click="NextBtnClick"/>
-        <Button 
-            HorizontalAlignment="Center"
-            Margin="0 5"
-            Content="Выйти"
-            Click="ExitBtnClick" Cursor="Hand"/>
-    </StackPanel>
+    <Grid>
+        <Grid.Resources>
+            <Style 
+                TargetType="{x:Type Button}"
+                BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Margin" Value="5 3"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Orientation="Horizontal">
+            <StackPanel
+                Orientation="Vertical">
+                <Button
+                    Content="Посмотреть весь список книг"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Посмотреть весь список авторов"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Посмотреть весь список читателей"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Посмотреть весь список категорий"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Посмотреть весь список жанров"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Посмотреть весь список издательств"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Посмотреть весь список выданных книг"
+                    Click="ShowBooksBtnClick"/>
+            </StackPanel>
+            <StackPanel
+                Orientation="Vertical">
+                <Button
+                    Content="Добавить книгу"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Добавить автора"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Добавить читателя"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Добавить категорию"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Добавить жанр"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Добавить издательство"
+                    Click="ShowBooksBtnClick"/>
+                <Button
+                    Content="Выдать книгу"
+                    Click="ShowBooksBtnClick"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
 </Page>
