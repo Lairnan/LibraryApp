@@ -21,10 +21,7 @@ namespace LibraryApp.Pages
 
             this.KeyDown += (s, e) =>
             {
-                if (e.Key == Key.Enter)
-                {
-                    AuthBtnClick(s,e);
-                }
+                if (e.Key == Key.Enter) AuthBtnClick(s, e);
             };
         }
 

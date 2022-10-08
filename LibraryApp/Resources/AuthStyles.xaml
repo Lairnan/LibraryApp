@@ -17,5 +17,6 @@
         <Setter Property="FontStyle" Value="Italic"/>
         <Setter Property="FontFamily" Value="Comic sans MS"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
 </ResourceDictionary>

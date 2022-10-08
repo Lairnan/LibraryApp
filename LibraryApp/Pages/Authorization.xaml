@@ -11,15 +11,19 @@
         <UniformGrid
             Columns="2">
             <Label
-                Content="Введите логин"/>
+                Content="Введите логин"
+                IsTabStop="False"/>
             <TextBox
                 x:Name="LogBox"
-                Margin="2 3"/>
+                Margin="2 3"
+                TabIndex="0"/>
             <Label
-                Content="Введите пароль"/>
+                Content="Введите пароль"
+                IsTabStop="False"/>
             <PasswordBox
                 x:Name="PassBox"
-                Margin="2 3"/>
+                Margin="2 3"
+                TabIndex="1"/>
             <TextBlock
                 x:Name="CaptchaText"
                 Visibility="Collapsed"
@@ -35,13 +39,12 @@
                 x:Name="CaptchaTextBox"
                 Visibility="Collapsed"
                 Margin="2 3"
-                TabIndex="0"/>
+                TabIndex="2"/>
             <Label
                 x:Name="CaptchaUpdate"
                 Style="{DynamicResource CaptchaLab}"
                 Visibility="Collapsed"
                 Content="Обновить"
-                TabIndex="1"
                 MouseLeftButtonDown="UpdateCaptchaDown" />
         </UniformGrid>
         <StackPanel 
@@ -50,14 +53,12 @@
             Orientation="Horizontal">
             <Button
                 Content="Войти"
-                Click="AuthBtnClick"
-                IsTabStop="False"/>
+                Click="AuthBtnClick"/>
             <Button
                 Margin="10 0 0 0"
                 Content="Зарегистрироваться"
                 Click="RegBtnClick" 
-                Cursor="Hand"
-                IsTabStop="False"/>
+                Cursor="Hand"/>
         </StackPanel>
     </StackPanel>
 </Page>

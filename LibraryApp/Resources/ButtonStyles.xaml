@@ -8,5 +8,6 @@
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontFamily" Value="Comic sans MS"/>
         <Setter Property="BorderBrush" Value="#FF17EF4C"/>
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
 </ResourceDictionary>

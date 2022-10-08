@@ -17,6 +17,7 @@
     MinHeight="300"
     Width="800"
     MinWidth="600"
+    IsTabStop="False"
     MouseDown="Window_MouseDown">
 
     <WindowChrome.WindowChrome>
@@ -32,6 +33,7 @@
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Margin" Value="3 0"/>
             <Setter Property="Foreground" Value="#fff"/>
+            <Setter Property="IsTabStop" Value="False"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -127,6 +129,7 @@
             Padding="5 2"
             FontSize="16"
             Cursor="Hand"
+            IsTabStop="False"
             FontFamily="Comic sans MS"
             HorizontalAlignment="Left"
             Content="&lt;- Back"
@@ -136,6 +139,7 @@
             Grid.Row="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            NavigationUIVisibility="Hidden"/>
+            NavigationUIVisibility="Hidden"
+            IsTabStop="False"/>
     </Grid>
 </Window>

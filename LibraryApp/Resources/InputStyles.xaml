@@ -5,6 +5,7 @@
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontStyle" Value="Italic"/>
         <Setter Property="FontFamily" Value="Comic sans MS"/>
+        <Setter Property="IsTabStop" Value="False"/>
     </Style>
     <Style x:Key="textBoxPasswordBoxStyles">
         <Setter Property="TextBox.Foreground" Value="#FFF3E114"/>
