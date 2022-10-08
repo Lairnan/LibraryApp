@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using LibraryApp.Models;
 
@@ -9,33 +10,53 @@ public static class Teachers
     public static IEnumerable<Teacher> GetTeachers()
     {
         using var con = new ConnectionDb();
-        const string query = "SELECT r.*, t.[name], s.passport as typeName FROM [Teachers] s" +
-                             " INNER JOIN Readers r on r.id = s.readerId" +
-                             " INNER JOIN Types T on T.id = r.typeid";
-        using var cmd = new SqlCommand(query, con.SqlConnection);
+        using var cmd = new SqlCommand(GetString(), con.SqlConnection);
         var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            yield return new Teacher
-            {
-                Reader = new Reader
-                {
-                    Id = (int) reader["id"],
-                    Surname = (string) reader["surname"],
-                    Name = (string) reader["name"],
-                    Patronymic = (string) reader["patronymic"],
-                    Type = new Type
-                    {
-                        Id = (int) reader["typeid"],
-                        Name = (string) reader["typeName"]
-                    },
-                    Address = (string) reader["address"],
-                    Phone = (long) reader["phone"],
-                    Login = (string) reader["login"],
-                    Password = (string) reader["password"]
-                },
-                Passport = (string)reader["passport"]
-            };
+            yield return GetTeacher(reader);
         }
+    }
+
+    private static string GetString(string newQuery = "")
+    {
+        const string query = "SELECT r.*, t.[name], s.passport as typeName FROM [Teachers] s" +
+                             " INNER JOIN Readers r on r.id = s.readerId" +
+                             " INNER JOIN Types T on T.id = r.typeid";
+        return query + newQuery;
+    }
+
+    private static Teacher GetTeacher(IDataRecord reader)
+    {
+        return new Teacher
+        {
+            Reader = GetReader(reader),
+            Passport = (string)reader["passport"]
+        };
+    }
+
+    private static Reader GetReader(IDataRecord reader)
+    {
+        return new Reader
+        {
+            Id = (int) reader["id"],
+            Surname = (string) reader["surname"],
+            Name = (string) reader["name"],
+            Patronymic = (string) reader["patronymic"],
+            Type = GetType(reader),
+            Address = (string) reader["address"],
+            Phone = (long) reader["phone"],
+            Login = (string) reader["login"],
+            Password = (string) reader["password"]
+        };
+    }
+
+    private static Type GetType(IDataRecord reader)
+    {
+        return new Type
+        {
+            Id = (int) reader["typeid"],
+            Name = (string) reader["typeName"]
+        };
     }
 }

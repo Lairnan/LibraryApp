@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using LibraryApp.Models;
 
@@ -9,16 +10,26 @@ public static class Categories
     public static IEnumerable<Category> GetCategories()
     {
         using var con = new ConnectionDb();
-        const string query = "SELECT * FROM [Categories]";
-        using var cmd = new SqlCommand(query, con.SqlConnection);
+        using var cmd = new SqlCommand(GetString(), con.SqlConnection);
         var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            yield return new Category
-            {
-                Id = (int)reader["id"],
-                Name = (string)reader["name"]
-            };
+            yield return GetCategory(reader);
         }
+    }
+
+    private static string GetString(string newQuery = "")
+    {
+        const string query = "SELECT * FROM [Categories]";
+        return query + newQuery;
+    }
+
+    private static Category GetCategory(IDataRecord reader)
+    {
+        return new Category
+        {
+            Id = (int)reader["id"],
+            Name = (string)reader["name"]
+        };
     }
 }

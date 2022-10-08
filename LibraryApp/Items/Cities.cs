@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using LibraryApp.Models;
 
@@ -9,16 +10,26 @@ public static class Cities
     public static IEnumerable<City> GetCities()
     {
         using var con = new ConnectionDb();
-        const string query = "SELECT * FROM [Cities]";
-        using var cmd = new SqlCommand(query, con.SqlConnection);
+        using var cmd = new SqlCommand(GetString(), con.SqlConnection);
         var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            yield return new City
-            {
-                Id = (int)reader["id"],
-                Name = (string)reader["name"]
-            };
+            yield return GetCity(reader);
         }
+    }
+
+    private static string GetString(string newQuery = "")
+    {
+        const string query = "SELECT * FROM [Cities]";
+        return query + newQuery;
+    }
+
+    private static City GetCity(IDataRecord reader)
+    {
+        return new City
+        {
+            Id = (int)reader["id"],
+            Name = (string)reader["name"]
+        };
     }
 }
