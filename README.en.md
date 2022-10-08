@@ -1,6 +1,6 @@
 Other language: [Русский](README.md)
 
-# LibraryApp IP (Does not have a program name)
+# LibraryApp ICT (Does not have a program name)
 
 This is a specialized program for the school library
 
