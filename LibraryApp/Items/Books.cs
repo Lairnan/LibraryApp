@@ -10,9 +10,19 @@ public static class Books
 {
     public static IEnumerable<Book> GetBooks()
     {
-        using var con = new ConnectionDb();
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
         var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            yield return GetBook(reader);
+        }
+    }
+    public static async IAsyncEnumerable<Book> GetBooksAsync()
+    {
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
+        await using var cmd = new SqlCommand(GetString(), con.SqlConnection);
+        var reader = await cmd.ExecuteReaderAsync();
         while (reader.Read())
         {
             yield return GetBook(reader);

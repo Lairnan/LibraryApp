@@ -9,9 +9,19 @@ public static class Publishers
 {
     public static IEnumerable<Publisher> GetPublishers()
     {
-        using var con = new ConnectionDb();
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
         var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            yield return GetPublisher(reader);
+        }
+    }
+    public static async IAsyncEnumerable<Publisher> GetPublishersAsync()
+    {
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
+        await using var cmd = new SqlCommand(GetString(), con.SqlConnection);
+        var reader = await cmd.ExecuteReaderAsync();
         while (reader.Read())
         {
             yield return GetPublisher(reader);

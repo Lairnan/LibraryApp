@@ -9,9 +9,19 @@ public static class Types
 {
     public static IEnumerable<Type> GetTypes()
     {
-        using var con = new ConnectionDb();
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
         var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            yield return GetType(reader);
+        }
+    }
+    public static async IAsyncEnumerable<Type> GetTypesAsync()
+    {
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
+        await using var cmd = new SqlCommand(GetString(), con.SqlConnection);
+        var reader = await cmd.ExecuteReaderAsync();
         while (reader.Read())
         {
             yield return GetType(reader);

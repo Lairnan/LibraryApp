@@ -11,9 +11,19 @@ public static class Loans
 {
     public static IEnumerable<Loan> GetLoans()
     {
-        using var con = new ConnectionDb();
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
         using var cmd = new SqlCommand(GetString(), con.SqlConnection);
         var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            yield return GetLoan(reader);
+        }
+    }
+    public static async IAsyncEnumerable<Loan> GetLoansAsync()
+    {
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
+        await using var cmd = new SqlCommand(GetString(), con.SqlConnection);
+        var reader = await cmd.ExecuteReaderAsync();
         while (reader.Read())
         {
             yield return GetLoan(reader);
