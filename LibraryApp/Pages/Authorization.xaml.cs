@@ -18,9 +18,17 @@ namespace LibraryApp.Pages
         {
             this._pageService = pageService;
             InitializeComponent();
+
+            this.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.Enter)
+                {
+                    AuthBtnClick(s,e);
+                }
+            };
         }
 
-        private int _attemps = 0;
+        private int _attempts = 0;
 
         private bool _isEnabled = false;
         private async void CaptchaGenerate()
@@ -53,7 +61,7 @@ namespace LibraryApp.Pages
 
         private bool CheckAttempts()
         {
-            if (_attemps <= 3) return true;
+            if (_attempts <= 3) return true;
             if (string.IsNullOrWhiteSpace(CaptchaTextBox.Text))
             {
                 MessageBox.Show("Поля не могут быть пустыми");
@@ -88,7 +96,6 @@ namespace LibraryApp.Pages
             var reader = await cmd.ExecuteReaderAsync();
             if (await reader.ReadAsync())
             {
-                await Task.Delay(500);
                 _pageService.Enter();
                 return true;
             }
@@ -115,7 +122,7 @@ namespace LibraryApp.Pages
                 if (await CheckLog(login, password)) return;
             }
 
-            if (++_attemps > 2)
+            if (++_attempts > 2)
             {
                 CaptchaGenerate();
             }

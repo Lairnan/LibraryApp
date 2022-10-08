@@ -19,7 +19,7 @@ public static class Cities
     }
     public static async IAsyncEnumerable<City> GetCitiesAsync()
     {
-        using var con = ConnectionDb.ConnectionDbAsync().Result;
+        using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd = new SqlCommand(GetString(), con.SqlConnection);
         var reader = await cmd.ExecuteReaderAsync();
         while (reader.Read())

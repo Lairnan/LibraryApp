@@ -3,8 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:LibraryApp.Pages"
-      mc:Ignorable="d">
+      xmlns:local="clr-namespace:LibraryApp.Pages">
     <StackPanel>
         <ListView
             x:Name="Lv"
@@ -12,10 +11,12 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="40" Header="Id" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Width="100" Header="Surname" DisplayMemberBinding="{Binding Surname}"/>
+                    <GridViewColumn Width="100" Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Width="40" Header="Patronymic" DisplayMemberBinding="{Binding Patronymic}"/>
+                    <GridViewColumn Width="100" Header="TypeName" DisplayMemberBinding="{Binding TypeName}"/>
                     <GridViewColumn Width="100" Header="Login" DisplayMemberBinding="{Binding Login}"/>
                     <GridViewColumn Width="100" Header="Password" DisplayMemberBinding="{Binding Password}"/>
-                    <GridViewColumn Width="40" Header="RoleId" DisplayMemberBinding="{Binding Role.Id}"/>
-                    <GridViewColumn Width="100" Header="RoleName" DisplayMemberBinding="{Binding Role.Name}"/>
                 </GridView>
             </ListView.View>
         </ListView>
