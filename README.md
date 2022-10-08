@@ -1,4 +1,4 @@
-Другие языки: [English](README.en.md) (Не работает)
+Другие языки: [English](README.en.md)
 
 # LibraryApp ИС (У программы нет названия)
 
