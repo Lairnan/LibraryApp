@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using LibraryApp.Models;
+using Type = LibraryApp.Models.Type;
 
 namespace LibraryApp.Items;
 
@@ -30,8 +33,9 @@ public static class Readers
 
     private static string GetString(string newQuery = "")
     {
-        const string query = "SELECT r.*, t.[name] as typeName FROM [Readers] r" +
-                             " INNER JOIN Types T on T.id = r.typeid";
+        const string query = "SELECT r.*, t.[name] as typeName, gn.name as gnName FROM [Readers] r" +
+                             " INNER JOIN Types T on T.id = r.typeid" +
+                             " INNER JOIN GroupsName gn on r.groupNameId = gn.id";
         return query + newQuery;
     }
 
@@ -44,6 +48,9 @@ public static class Readers
             Name = (string) reader["name"],
             Patronymic = (string) reader["patronymic"],
             Type = GetType(reader),
+            Group = (int)reader["group"],
+            GroupName = (string)reader["gnName"],
+            BirthDate = (DateTime)reader["birthdate"],
             Address = (string)reader["address"],
             Phone = (long)reader["phone"],
             Login = (string)reader["login"],
@@ -58,5 +65,49 @@ public static class Readers
             Id = (int)reader["typeid"],
             Name = (string)reader["typeName"]
         };
+    }
+
+    public static int Add(Reader reader)
+    {
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
+        const string query = "INSERT INTO Readers (surname, [name], patronymic, typeid, [group]" +
+                             ", groupName, birthdate, [address], [login], [password], phone) " +
+                             "VALUES " +
+                             "(@surname, @name, @patronymic, @type, @group, @groupName, @birthdate, @address, @login, @password, @phone)";
+        using var cmd = new SqlCommand(query, con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("surname", SqlDbType.NVarChar, 30) {Value = reader.Surname});
+        cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 30) {Value = reader.Name});
+        cmd.Parameters.Add(new SqlParameter("patronymic", SqlDbType.NVarChar, 30) {Value = reader.Patronymic});
+        cmd.Parameters.AddWithValue("type", reader.Type.Id);
+        cmd.Parameters.AddWithValue("group", reader.Group);
+        cmd.Parameters.Add(new SqlParameter("groupName", SqlDbType.NVarChar, 1) {Value = reader.GroupName});
+        cmd.Parameters.AddWithValue("birthdate", reader.BirthDate);
+        cmd.Parameters.Add(new SqlParameter("address", SqlDbType.NVarChar, 50) {Value = reader.Address});
+        cmd.Parameters.Add(new SqlParameter("login", SqlDbType.NVarChar, 50) {Value = reader.Login});
+        cmd.Parameters.Add(new SqlParameter("password", SqlDbType.NVarChar, 50) {Value = reader.Password});
+        cmd.Parameters.AddWithValue("phone", reader.Phone);
+        return cmd.ExecuteNonQuery();
+    }
+
+    public static async Task<int> AddAsync(Reader reader)
+    {
+        using var con = await ConnectionDb.ConnectionDbAsync();
+        const string query = "INSERT INTO Readers (surname, [name], patronymic, typeid, [group]" +
+                             ", groupName, birthdate, [address], [login], [password], phone) " +
+                             "VALUES " +
+                             "(@surname, @name, @patronymic, @type, @group, @groupName, @birthdate, @address, @login, @password, @phone)";
+        await using var cmd = new SqlCommand(query, con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("surname", SqlDbType.NVarChar, 30) {Value = reader.Surname});
+        cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 30) {Value = reader.Name});
+        cmd.Parameters.Add(new SqlParameter("patronymic", SqlDbType.NVarChar, 30) {Value = reader.Patronymic});
+        cmd.Parameters.AddWithValue("type", reader.Type.Id);
+        cmd.Parameters.AddWithValue("group", reader.Group);
+        cmd.Parameters.Add(new SqlParameter("groupName", SqlDbType.NVarChar, 1) {Value = reader.GroupName});
+        cmd.Parameters.AddWithValue("birthdate", reader.BirthDate);
+        cmd.Parameters.Add(new SqlParameter("address", SqlDbType.NVarChar, 50) {Value = reader.Address});
+        cmd.Parameters.Add(new SqlParameter("login", SqlDbType.NVarChar, 50) {Value = reader.Login});
+        cmd.Parameters.Add(new SqlParameter("password", SqlDbType.NVarChar, 50) {Value = reader.Password});
+        cmd.Parameters.AddWithValue("phone", reader.Phone);
+        return await cmd.ExecuteNonQueryAsync();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using LibraryApp.Models;
 
 namespace LibraryApp.Items;
@@ -41,5 +42,23 @@ public static class Cities
             Id = (int)reader["id"],
             Name = (string)reader["name"]
         };
+    }
+
+    public static int Add(City city)
+    {
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
+        const string query = "INSERT INTO Cities ([name]) VALUES (@name)";
+        using var cmd = new SqlCommand(query, con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 30) {Value = city.Name});
+        return cmd.ExecuteNonQuery();
+    }
+
+    public static async Task<int> AddAsync(City city)
+    {
+        using var con = await ConnectionDb.ConnectionDbAsync();
+        const string query = "INSERT INTO Cities ([name]) VALUES (@name)";
+        await using var cmd = new SqlCommand(query, con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 30) {Value = city.Name});
+        return await cmd.ExecuteNonQueryAsync();
     }
 }

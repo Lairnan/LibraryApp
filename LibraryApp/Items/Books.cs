@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using LibraryApp.Models;
 
 namespace LibraryApp.Items;
@@ -28,7 +29,6 @@ public static class Books
             yield return GetBook(reader);
         }
     }
-
     private static string GetString(string newQuery = "")
     {
         const string query = "SELECT b.*" +
@@ -44,7 +44,6 @@ public static class Books
                              " INNER JOIN Cities city on city.id = b.cityId";
         return query + newQuery;
     }
-
     private static Book GetBook(IDataRecord reader)
     {
         return new Book
@@ -63,7 +62,6 @@ public static class Books
             ReleaseDate = (DateTime)reader["releaseDate"]
         };
     }
-
     private static Author GetAuthor(IDataRecord reader)
     {
         return new Author
@@ -75,7 +73,6 @@ public static class Books
             Cipher = (string)reader["authorCipher"]
         };
     }
-
     private static City GetCity(IDataRecord reader)
     {
         return new City
@@ -84,7 +81,6 @@ public static class Books
             Name = (string)reader["cityName"]
         };
     }
-
     private static Genre GetGenre(IDataRecord reader)
     {
         return new Genre
@@ -93,7 +89,6 @@ public static class Books
             Name = (string)reader["gName"]
         };
     }
-
     private static Category GetCategory(IDataRecord reader)
     {
         return new Category
@@ -102,7 +97,6 @@ public static class Books
             Name = (string)reader["catName"]
         };
     }
-
     private static Publisher GetPublisher(IDataRecord reader)
     {
         return new Publisher
@@ -111,5 +105,47 @@ public static class Books
             Name = (string)reader["pName"],
             Cipher = (string)reader["pCipher"]
         };
+    }
+
+    public static int Add(Book book)
+    {
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
+        const string query =
+            "INSERT INTO Books (name, authorId, genreId, categoryId, publisherId, UDC, LBC, ISBN, pages, releaseDate, cityId) VALUES " +
+            "(@name, @author, @genre, @category, @publisher, @udc, @lbc, @isbn, @pages, @releaseDate, @city)";
+        using var cmd = new SqlCommand(query, con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 100) {Value = book.Name});
+        cmd.Parameters.AddWithValue("author", book.Author.Id);
+        cmd.Parameters.AddWithValue("genre", book.Genre.Id);
+        cmd.Parameters.AddWithValue("category", book.Category.Id);
+        cmd.Parameters.AddWithValue("publisher", book.Publisher.Id);
+        cmd.Parameters.Add(new SqlParameter("udc", SqlDbType.NVarChar, 30) {Value = book.UDC});
+        cmd.Parameters.Add(new SqlParameter("lbc", SqlDbType.NVarChar, 20) {Value = book.LBC});
+        cmd.Parameters.Add(new SqlParameter("isbn", SqlDbType.NVarChar, 25) {Value = book.ISBN});
+        cmd.Parameters.AddWithValue("pages", book.Pages);
+        cmd.Parameters.AddWithValue("releaseDate", book.ReleaseDate);
+        cmd.Parameters.AddWithValue("city", book.City.Id);
+        return cmd.ExecuteNonQuery();
+    }
+
+    public static async Task<int> AddAsync(Book book)
+    {
+        using var con = await ConnectionDb.ConnectionDbAsync();
+        const string query =
+            "INSERT INTO Books (name, authorId, genreId, categoryId, publisherId, UDC, LBC, ISBN, pages, releaseDate, cityId) VALUES " +
+            "(@name, @author, @genre, @category, @publisher, @udc, @lbc, @isbn, @pages, @releaseDate, @city)";
+        await using var cmd = new SqlCommand(query, con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 100) {Value = book.Name});
+        cmd.Parameters.AddWithValue("author", book.Author.Id);
+        cmd.Parameters.AddWithValue("genre", book.Genre.Id);
+        cmd.Parameters.AddWithValue("category", book.Category.Id);
+        cmd.Parameters.AddWithValue("publisher", book.Publisher.Id);
+        cmd.Parameters.Add(new SqlParameter("udc", SqlDbType.NVarChar, 30) {Value = book.UDC});
+        cmd.Parameters.Add(new SqlParameter("lbc", SqlDbType.NVarChar, 20) {Value = book.LBC});
+        cmd.Parameters.Add(new SqlParameter("isbn", SqlDbType.NVarChar, 25) {Value = book.ISBN});
+        cmd.Parameters.AddWithValue("pages", book.Pages);
+        cmd.Parameters.AddWithValue("releaseDate", book.ReleaseDate);
+        cmd.Parameters.AddWithValue("city", book.City.Id);
+        return await cmd.ExecuteNonQueryAsync();
     }
 }

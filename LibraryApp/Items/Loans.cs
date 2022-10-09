@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using LibraryApp.Models;
 using Type = LibraryApp.Models.Type;
 
@@ -127,5 +128,33 @@ public static class Loans
             Pages = (int) reader["pages"],
             ReleaseDate = (DateTime) reader["releaseDate"]
         };
+    }
+
+    public static int Add(Loan loan)
+    {
+        using var con = ConnectionDb.ConnectionDbAsync().Result;
+        const string query = "INSERT INTO Loans (readerId, bookId, takeDate, planDateDel, factDateDel) VALUES " +
+                             "(@reader, @book, @takeDate, @planDateDel, @factDateDel)";
+        using var cmd = new SqlCommand(query, con.SqlConnection);
+        cmd.Parameters.AddWithValue("reader", loan.Reader.Id);
+        cmd.Parameters.AddWithValue("book", loan.Book.Id);
+        cmd.Parameters.AddWithValue("takeDate", loan.TakeDate);
+        cmd.Parameters.AddWithValue("planDateDel", loan.PlanDateDel);
+        cmd.Parameters.AddWithValue("factDateDel", loan.FactDateDel);
+        return cmd.ExecuteNonQuery();
+    }
+
+    public static async Task<int> AddAsync(Loan loan)
+    {
+        using var con = await ConnectionDb.ConnectionDbAsync();
+        const string query = "INSERT INTO Loans (readerId, bookId, takeDate, planDateDel, factDateDel) VALUES " +
+                             "(@reader, @book, @takeDate, @planDateDel, @factDateDel)";
+        await using var cmd = new SqlCommand(query, con.SqlConnection);
+        cmd.Parameters.AddWithValue("reader", loan.Reader.Id);
+        cmd.Parameters.AddWithValue("book", loan.Book.Id);
+        cmd.Parameters.AddWithValue("takeDate", loan.TakeDate);
+        cmd.Parameters.AddWithValue("planDateDel", loan.PlanDateDel);
+        cmd.Parameters.AddWithValue("factDateDel", loan.FactDateDel);
+        return await cmd.ExecuteNonQueryAsync();
     }
 }
