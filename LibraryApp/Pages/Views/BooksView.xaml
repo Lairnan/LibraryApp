@@ -29,7 +29,7 @@
                     <GridViewColumn Width="75" Header="ББК" DisplayMemberBinding="{Binding LBC}"/>
                     <GridViewColumn Width="100" Header="ISBN" DisplayMemberBinding="{Binding ISBN}"/>
                     <GridViewColumn Width="100" Header="Кол-во страниц" DisplayMemberBinding="{Binding Pages}"/>
-                    <GridViewColumn Width="100" Header="Дата выпуска" DisplayMemberBinding="{Binding RealeaseDate}"/>
+                    <GridViewColumn Width="100" Header="Дата выпуска" DisplayMemberBinding="{Binding ReleaseDate}"/>
                     <GridViewColumn Width="100" Header="Город издания" DisplayMemberBinding="{Binding City.Name}"/>
                 </GridView>
             </ListView.View>

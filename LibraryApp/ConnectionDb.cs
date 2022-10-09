@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace LibraryApp;
 
-internal class ConnectionDb : IDisposable
+public class ConnectionDb : IDisposable
 {
     public static async Task<ConnectionDb> ConnectionDbAsync()
     {

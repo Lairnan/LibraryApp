@@ -50,6 +50,15 @@ public class PageService
         MainWindow.Back.IsEnabled = CanGoToBack;
     }
 
+    public void Reg()
+    {
+        MainWindow.Window.WindowState = WindowState.Normal;
+        OnPageChanged?.Invoke(new Registration(this));
+        MainWindow.Back.Visibility = Visibility.Collapsed;
+        MainWindow.Back.IsEnabled = CanGoToBack;
+        MainWindow.Exit.Visibility = Visibility.Collapsed;
+    }
+
     public void GoToBack()
     {
         _history.Pop();

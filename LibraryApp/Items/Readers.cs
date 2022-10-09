@@ -70,8 +70,8 @@ public static class Readers
     public static int Add(Reader reader)
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
-        const string query = "INSERT INTO Readers (surname, [name], patronymic, typeid, [group]" +
-                             ", groupName, birthdate, [address], [login], [password], phone) " +
+        const string query = "INSERT INTO Readers (surname, [name], patronymic, typeid, [group], " +
+                             "groupName, birthdate, [address], [login], [password], phone) " +
                              "VALUES " +
                              "(@surname, @name, @patronymic, @type, @group, @groupName, @birthdate, @address, @login, @password, @phone)";
         using var cmd = new SqlCommand(query, con.SqlConnection);

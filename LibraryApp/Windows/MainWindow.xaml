@@ -14,7 +14,7 @@
     WindowState="Normal"
     Icon="../Images/LibraryIcon.png"
     Height="450"
-    MinHeight="300"
+    MinHeight="350"
     Width="800"
     MinWidth="600"
     IsTabStop="False"
@@ -81,8 +81,11 @@
                         Grid.Row="0"
                         x:Name="GridHeader">
                         <Menu
+                            IsTabStop="False"
                             Background="Transparent">
-                            <MenuItem Header="Test">
+                            <MenuItem 
+                                IsTabStop="False"
+                                Header="Test">
                                 <MenuItem Header="Test2"/>
                             </MenuItem>
                         </Menu>

@@ -18,6 +18,8 @@ namespace LibraryApp.Pages
         public Authorization(PageService pageService)
         {
             this._pageService = pageService;
+            MainWindow.Window.MinHeight = 350;
+            MainWindow.Window.Height = 450;
             InitializeComponent();
 
             this.KeyDown += (s, e) =>
@@ -59,7 +61,7 @@ namespace LibraryApp.Pages
 
         private bool CheckAttempts()
         {
-            if (_attempts <= 3) return true;
+            if (_attempts < 3) return true;
             if (string.IsNullOrWhiteSpace(CaptchaTextBox.Text))
             {
                 MessageBox.Show("Поля не могут быть пустыми");
@@ -78,7 +80,6 @@ namespace LibraryApp.Pages
             MessageBox.Show("Капча введена неверно");
             CaptchaGenerate();
             return false;
-
         }
 
         private async Task<bool> CheckLog(string login, string password)
@@ -104,11 +105,8 @@ namespace LibraryApp.Pages
 
         private async void AuthBtnClick(object sender, RoutedEventArgs e)
         {
-            if (!CheckAttempts())
-            {
-                return;
-            }
-            
+            if (!CheckAttempts()) return;
+
             var login = LogBox.Text;
             var password = PassBox.Password;
             if (string.IsNullOrWhiteSpace(login) | string.IsNullOrWhiteSpace(password))
@@ -125,11 +123,15 @@ namespace LibraryApp.Pages
                 CaptchaGenerate();
             }
         }
+        
         private void UpdateCaptchaDown(object sender, MouseButtonEventArgs e)
         {
             CaptchaGenerate();
         }
 
-        private void RegBtnClick(object sender, RoutedEventArgs e){}
+        private void RegBtnClick(object sender, RoutedEventArgs e)
+        {
+            _pageService.Reg();
+        }
     }
 }

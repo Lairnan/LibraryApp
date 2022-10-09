@@ -11,11 +11,11 @@ public partial class BooksView : Page
     {
         _pageService = pageService;
         InitializeComponent();
-        GetDates();
+        GetData();
         Lv.ItemsSource = Books;
     }
 
-    private async void GetDates()
+    private async void GetData()
     {
         await foreach (var book in Items.Books.GetAsync())
         {
