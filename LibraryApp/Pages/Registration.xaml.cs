@@ -36,7 +36,8 @@ public partial class Registration : Page
     {
         await foreach (var type in Items.Types.GetAsync())
         {
-            Types.Add(type);
+            if(type.Name != "Библиотекарь")
+                Types.Add(type);
         }
         TypeBox.Items.Refresh();
         CaptchaGenerate();
@@ -116,17 +117,9 @@ public partial class Registration : Page
             var login = LogBox.Text.Trim();
             var password = PassBox.Password.Trim();
             var phone = long.Parse(PhoneBox.Text.Trim());
-
-            /*MessageBox.Show(groupName);
-            MessageBox.Show(birthdate.ToString("dd.MM.yyyy"));
-            MessageBox.Show(phone.ToString());
-            MessageBox.Show(type.Name);*/
-
-            /*MessageBox.Show($"Surname - {surname} \nName - {name} \nPatronymic - {patronymic} " +
-                            $"\nType - {type.Id} - {type.Name} \nGroup - {group} " +
-                            $"\nGroupName - {groupName} \nBirthdate - {birthdate:dd.MM.yyyy} " +
-                            $"\nAddress - {address} \nLogin - {login} \nPassword - {password} " +
-                            $"\nPhone - {phone}");*/
+            string? passport = null;
+            if(PassportBox.Visibility == Visibility.Visible)
+                passport= PassportBox.Text;
 
             if (string.IsNullOrWhiteSpace(surname) | string.IsNullOrWhiteSpace(name) | string.IsNullOrWhiteSpace(patronymic) | 
                 string.IsNullOrWhiteSpace(group.ToString()) | string.IsNullOrWhiteSpace(groupName) | 
@@ -134,13 +127,13 @@ public partial class Registration : Page
                 string.IsNullOrWhiteSpace(address) | 
                 string.IsNullOrWhiteSpace(login) | 
                 string.IsNullOrWhiteSpace(password) |
-                string.IsNullOrWhiteSpace(phone.ToString()))
+                string.IsNullOrWhiteSpace(phone.ToString()) | (passport != null && string.IsNullOrWhiteSpace(passport)))
             {
                 MessageBox.Show("Поля не могут быть пустыми");
             }
             else
             {
-                var reader = new Reader
+                var reader = new Reader 
                 {
                     Surname = surname,
                     Name = name,
@@ -152,7 +145,8 @@ public partial class Registration : Page
                     Address = address,
                     Login = login,
                     Password = password,
-                    Phone = phone
+                    Phone = phone,
+                    Passport = passport
                 };
                 if (await CheckLog(reader)) return;
             }
@@ -194,5 +188,20 @@ public partial class Registration : Page
     private void AuthBtnClick(object sender, RoutedEventArgs e)
     {
         _pageService.Start();
+    }
+
+    private void TypeBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        switch (TypeBox.SelectedIndex)
+        {
+            case 0:
+                PassportBox.Visibility = Visibility.Collapsed;
+                PassportLab.Visibility = Visibility.Collapsed;
+                break;
+            case 1:
+                PassportBox.Visibility = Visibility.Visible;
+                PassportLab.Visibility = Visibility.Visible;
+                break;
+        }
     }
 }

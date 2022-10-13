@@ -37,7 +37,8 @@
                 HorizontalContentAlignment="Center"
                 Margin="2 1"
                 VerticalContentAlignment="Center"
-                SelectedIndex="0">
+                SelectedIndex="0"
+                SelectionChanged="TypeBox_OnSelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
@@ -100,6 +101,16 @@
                 IsTabStop="False"/>
             <TextBox
                 x:Name="PhoneBox"
+                Margin="2 3"
+                TabIndex="1"/>
+            <Label
+                x:Name="PassportLab"
+                Content="Введите паспорт"
+                Visibility="Collapsed"
+                IsTabStop="False"/>
+            <TextBox
+                x:Name="PassportBox"
+                Visibility="Collapsed"
                 Margin="2 3"
                 TabIndex="1"/>
         </UniformGrid>
