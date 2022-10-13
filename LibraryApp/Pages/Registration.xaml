@@ -35,6 +35,7 @@
             <ComboBox
                 x:Name="TypeBox"
                 HorizontalContentAlignment="Center"
+                Margin="2 1"
                 VerticalContentAlignment="Center"
                 SelectedIndex="0">
                 <ComboBox.ItemTemplate>
@@ -56,6 +57,7 @@
             <ComboBox
                 x:Name="GroupName"
                 SelectedIndex="0"
+                Margin="2 1"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center">
                 <TextBlock Text="а"/>
@@ -107,11 +109,11 @@
             <TextBlock
                 x:Name="CaptchaText"
                 Style="{DynamicResource CaptchaText}"
-                FontSize="20"
+                FontSize="26"
                 Foreground="White"
                 Text="">
                 <TextBlock.RenderTransform>
-                    <MatrixTransform Matrix="1.5 -0.03 0.5 1 4 -7"/>
+                    <MatrixTransform Matrix="1.5 -0.03 0.5 1 5 -7"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
             <TextBox

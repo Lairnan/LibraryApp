@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using LibraryApp.Pages;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace LibraryApp.Windows
 {

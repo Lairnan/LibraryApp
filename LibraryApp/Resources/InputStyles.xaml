@@ -7,7 +7,7 @@
         <Setter Property="FontFamily" Value="Comic sans MS"/>
         <Setter Property="IsTabStop" Value="False"/>
     </Style>
-    <Style x:Key="textBoxPasswordBoxStyles">
+    <Style x:Key="TextBoxPasswordBoxStyles">
         <Setter Property="TextBox.Foreground" Value="#FFF3E114"/>
         <Setter Property="TextBox.Background" Value="#FF238DEF"/>
         <Setter Property="TextBox.FontSize" Value="16"/>
@@ -16,6 +16,6 @@
         <Setter Property="TextBox.BorderThickness" Value="0 0 0 1"/>
         <Setter Property="TextBox.BorderBrush" Value="#FF17EF4C"/>
     </Style>
-    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource ResourceKey=textBoxPasswordBoxStyles}"/>
-    <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource ResourceKey=textBoxPasswordBoxStyles}"/>
+    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource ResourceKey=TextBoxPasswordBoxStyles}"/>
+    <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource ResourceKey=TextBoxPasswordBoxStyles}"/>
 </ResourceDictionary>

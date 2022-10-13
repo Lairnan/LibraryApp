@@ -75,11 +75,7 @@ public static class Loans
             Surname = (string) reader["readerSurname"],
             Name = (string) reader["readerName"],
             Patronymic = (string) reader["readerPatronymic"],
-            Type = new Type
-            {
-                Id = (int) reader["typeid"],
-                Name = (string) reader["typeName"]
-            },
+            Type = GetType(reader),
             Address = (string) reader["address"],
             Phone = (long) reader["phone"],
             Login = (string) reader["login"],
@@ -87,46 +83,75 @@ public static class Loans
         };
     }
 
+    private static Type GetType(IDataRecord reader)
+    {
+        return new Type
+        {
+            Id = (int) reader["typeid"],
+            Name = (string) reader["typeName"]
+        };
+    }
+
     private static Book GetBook(IDataRecord reader)
     {
         return new Book
         {
-            Id = (int) reader["id"],
-            Name = (string) reader["name"],
-            Author = new Author
-            {
-                Id = (int) reader["authorId"],
-                Surname = (string) reader["authorSurname"],
-                Name = (string) reader["authorName"],
-                Patronymic = (string) reader["authorPatronymic"],
-                Cipher = (string) reader["authorCipher"]
-            },
-            Category = new Category
-            {
-                Id = (int) reader["catId"],
-                Name = (string) reader["catName"]
-            },
-            Genre = new Genre
-            {
-                Id = (int) reader["gId"],
-                Name = (string) reader["gName"]
-            },
-            Publisher = new Publisher
-            {
-                Id = (int) reader["pId"],
-                Name = (string) reader["pName"],
-                Cipher = (string) reader["pCipher"]
-            },
-            City = new City
-            {
-                Id = (int) reader["cityId"],
-                Name = (string) reader["cityName"]
-            },
-            UDC = (string) reader["UDC"],
-            LBC = (string) reader["LBC"],
-            ISBN = (string) reader["ISBN"],
-            Pages = (int) reader["pages"],
-            ReleaseDate = (DateTime) reader["releaseDate"]
+            Id = (int)reader["id"],
+            Name = (string)reader["name"],
+            Author = GetAuthor(reader),
+            Category = GetCategory(reader),
+            Genre = GetGenre(reader),
+            Publisher = GetPublisher(reader),
+            City = GetCity(reader),
+            UDC = (string)reader["UDC"],
+            LBC = (string)reader["LBC"],
+            ISBN = (string)reader["ISBN"],
+            Pages = (int)reader["pages"],
+            ReleaseDate = (DateTime)reader["releaseDate"]
+        };
+    }
+    private static Author GetAuthor(IDataRecord reader)
+    {
+        return new Author
+        {
+            Id = (int) reader["authorId"],
+            Surname = (string) reader["authorSurname"],
+            Name = (string) reader["authorName"],
+            Patronymic = (string) reader["authorPatronymic"],
+            Cipher = (string) reader["authorCipher"]
+        };
+    }
+    private static City GetCity(IDataRecord reader)
+    {
+        return new City
+        {
+            Id = (int) reader["cityId"],
+            Name = (string) reader["cityName"]
+        };
+    }
+    private static Genre GetGenre(IDataRecord reader)
+    {
+        return new Genre
+        {
+            Id = (int) reader["gId"],
+            Name = (string) reader["gName"]
+        };
+    }
+    private static Category GetCategory(IDataRecord reader)
+    {
+        return new Category
+        {
+            Id = (int) reader["catId"],
+            Name = (string) reader["catName"]
+        };
+    }
+    private static Publisher GetPublisher(IDataRecord reader)
+    {
+        return new Publisher
+        {
+            Id = (int) reader["pId"],
+            Name = (string) reader["pName"],
+            Cipher = (string) reader["pCipher"]
         };
     }
 

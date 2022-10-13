@@ -47,7 +47,7 @@
                 Orientation="Vertical">
                 <Button
                     Content="Добавить книгу"
-                    Click="ShowBooksBtnClick"/>
+                    Click="AddBookBtnClick"/>
                 <Button
                     Content="Добавить автора"
                     Click="ShowBooksBtnClick"/>

@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using LibraryApp.Pages;
 using LibraryApp.Windows;
 
 namespace LibraryApp;
@@ -19,8 +20,18 @@ public class WindowMoves
 
     public void DragMoveLeftBtnDown(object sender, MouseButtonEventArgs e)
     {
+        
         if (e.ClickCount == 2)
         {
+            if (e.Source is Frame fr)
+            {
+                switch (fr.Content)
+                {
+                    case Registration reg when reg.CaptchaUpdate.IsMouseOver:
+                    case Authorization auth when auth.CaptchaUpdate.IsMouseOver:
+                        return;
+                }
+            }
             if (_window.ResizeMode is ResizeMode.CanResize or ResizeMode.CanResizeWithGrip)
             {
                 SwitchState();

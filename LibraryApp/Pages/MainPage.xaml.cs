@@ -2,8 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using LibraryApp.Items;
-using LibraryApp.Models;
+using LibraryApp.Pages.Adds;
 using LibraryApp.Pages.Views;
 
 namespace LibraryApp.Pages
@@ -23,6 +22,11 @@ namespace LibraryApp.Pages
         private void ShowBooksBtnClick(object sender, RoutedEventArgs e)
         {
             _pageService.Navigate(new BooksView(_pageService));
+        }
+
+        private void AddBookBtnClick(object sender, RoutedEventArgs e)
+        {
+            _pageService.Navigate(new AddBook(_pageService));
         }
     }
 }

@@ -1,0 +1,147 @@
+﻿<Page x:Class="LibraryApp.Pages.Adds.AddBook"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:LibraryApp.Pages.Adds"
+      mc:Ignorable="d">
+    <StackPanel>
+        <UniformGrid
+            Columns="2">
+            <Label
+                Content="Введите название"
+                IsTabStop="False"/>
+            <TextBox
+                x:Name="NameBox"
+                Margin="2 3"
+                TabIndex="0"/>
+            <Label
+                Content="Выберите автора"
+                IsTabStop="False"/>
+            <ComboBox
+                x:Name="AuthorBox"
+                Margin="2 1"
+                SelectedIndex="0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} {1} {2} | {3}">
+                                    <Binding Path="Surname"/>
+                                    <Binding Path="Name"/>
+                                    <Binding Path="Patronymic"/>
+                                    <Binding Path="Cipher"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label
+                Content="Выберите жанр"
+                IsTabStop="False"/>
+            <ComboBox
+                x:Name="GenreBox"
+                Margin="2 1"
+                SelectedIndex="0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label
+                Content="Выберите категорию"
+                IsTabStop="False"/>
+            <ComboBox
+                x:Name="CategoryBox"
+                Margin="2 1"
+                SelectedIndex="0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label
+                Content="Выберите издателя"
+                IsTabStop="False"/>
+            <ComboBox
+                x:Name="PubBox"
+                Margin="2 1"
+                SelectedIndex="0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} | {1}">
+                                    <Binding Path="Name"/>
+                                    <Binding Path="Cipher"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label
+                Content="Введите УДК"
+                IsTabStop="False"/>
+            <TextBox
+                x:Name="UdcBox"
+                Margin="2 3"
+                TabIndex="0"/>
+            <Label
+                Content="Введите ББК"
+                IsTabStop="False"/>
+            <TextBox
+                x:Name="LbcBox"
+                Margin="2 3"
+                TabIndex="0"/>
+            <Label
+                Content="Введите ISBN"
+                IsTabStop="False"/>
+            <TextBox
+                x:Name="IsbnBox"
+                Margin="2 3"
+                TabIndex="0"/>
+            <Label
+                Content="Введите количество страниц"
+                IsTabStop="False"/>
+            <TextBox
+                x:Name="PagesBox"
+                Margin="2 3"
+                TabIndex="0"/>
+            <Label
+                Content="Введите дату выпуска книги"
+                IsTabStop="False"/>
+            <TextBox
+                x:Name="ReleaseBox"
+                Margin="2 3"
+                TabIndex="1"/>
+            <Label
+                Content="Выберите город издания книги"
+                IsTabStop="False"/>
+            <ComboBox
+                x:Name="CityBox"
+                SelectedIndex="0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </UniformGrid>
+        <StackPanel 
+            Margin="0 5"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                IsTabStop="False"
+                Content="Добавить"/>
+            <Button
+                IsTabStop="False"
+                Margin="10 0 0 0"
+                Content="Отмена"/>
+        </StackPanel>
+    </StackPanel>
+</Page>

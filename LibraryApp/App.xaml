@@ -9,6 +9,7 @@
                 <ResourceDictionary Source="Resources/InputStyles.xaml"/>
                 <ResourceDictionary Source="Resources/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="Resources/AuthStyles.xaml"/>
+                <ResourceDictionary Source="Resources/ComboBoxStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
