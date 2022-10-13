@@ -16,4 +16,5 @@ public class Reader
     public long Phone { get; set; }
     public string Login { get; set; }
     public string Password { get; set; }
+    public string? Passport { get; set; }
 }

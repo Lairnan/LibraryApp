@@ -54,7 +54,8 @@ public static class Readers
             Address = (string)reader["address"],
             Phone = (long)reader["phone"],
             Login = (string)reader["login"],
-            Password = (string)reader["password"]
+            Password = (string)reader["password"],
+            Passport = (string)reader["passport"]
         };
     }
 
@@ -71,9 +72,9 @@ public static class Readers
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
         const string query = "INSERT INTO Readers (surname, [name], patronymic, typeid, [group], " +
-                             "groupName, birthdate, [address], [login], [password], phone) " +
+                             "groupName, birthdate, [address], [login], [password], phone, passport) " +
                              "VALUES " +
-                             "(@surname, @name, @patronymic, @type, @group, @groupName, @birthdate, @address, @login, @password, @phone)";
+                             "(@surname, @name, @patronymic, @type, @group, @groupName, @birthdate, @address, @login, @password, @phone, @passport)";
         using var cmd = new SqlCommand(query, con.SqlConnection);
         cmd.Parameters.Add(new SqlParameter("surname", SqlDbType.NVarChar, 30) {Value = reader.Surname});
         cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 30) {Value = reader.Name});
@@ -86,16 +87,17 @@ public static class Readers
         cmd.Parameters.Add(new SqlParameter("login", SqlDbType.NVarChar, 50) {Value = reader.Login});
         cmd.Parameters.Add(new SqlParameter("password", SqlDbType.NVarChar, 50) {Value = reader.Password});
         cmd.Parameters.AddWithValue("phone", reader.Phone);
+        cmd.Parameters.Add(new SqlParameter("passport", SqlDbType.NVarChar, 10) {Value = reader.Passport});
         return cmd.ExecuteNonQuery();
     }
 
     public static async Task<int> AddAsync(Reader reader)
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
-        const string query = "INSERT INTO Readers (surname, [name], patronymic, typeid, [group]" +
-                             ", groupName, birthdate, [address], [login], [password], phone) " +
+        const string query = "INSERT INTO Readers (surname, [name], patronymic, typeid, [group], " +
+                             "groupName, birthdate, [address], [login], [password], phone, passport) " +
                              "VALUES " +
-                             "(@surname, @name, @patronymic, @type, @group, @groupName, @birthdate, @address, @login, @password, @phone)";
+                             "(@surname, @name, @patronymic, @type, @group, @groupName, @birthdate, @address, @login, @password, @phone, @passport)";
         await using var cmd = new SqlCommand(query, con.SqlConnection);
         cmd.Parameters.Add(new SqlParameter("surname", SqlDbType.NVarChar, 30) {Value = reader.Surname});
         cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 30) {Value = reader.Name});
@@ -108,6 +110,7 @@ public static class Readers
         cmd.Parameters.Add(new SqlParameter("login", SqlDbType.NVarChar, 50) {Value = reader.Login});
         cmd.Parameters.Add(new SqlParameter("password", SqlDbType.NVarChar, 50) {Value = reader.Password});
         cmd.Parameters.AddWithValue("phone", reader.Phone);
+        cmd.Parameters.Add(new SqlParameter("passport", SqlDbType.NVarChar, 10) {Value = reader.Passport});
         return await cmd.ExecuteNonQueryAsync();
     }
 }
