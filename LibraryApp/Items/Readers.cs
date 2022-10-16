@@ -82,6 +82,8 @@ public static class Readers
     public static int Add(Reader reader)
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
+        CheckLogin(reader).Wait();
+        CheckPhone(reader).Wait();
         var cmd = GetCommand(con).Result;
         cmd.Parameters["@surname"].Value = reader.Surname;
         cmd.Parameters["@name"].Value = reader.Name;
@@ -132,15 +134,16 @@ public static class Readers
 
     public static async Task<int> AddTeacherAsync(Teacher teacher)
     {
-        await AddAsync(teacher.Reader);
-        
         using var con = await ConnectionDb.ConnectionDbAsync();
+        await CheckPassport(con, teacher);
+        await AddAsync(teacher.Reader);
         int readerId;
         await using (var readerCmd = new SqlCommand(GetString(" where login = @login"),
                          con.SqlConnection))
         {
             readerCmd.Parameters.AddWithValue("@login", teacher.Reader.Login);
             readerId = (int) readerCmd.ExecuteScalar();
+            readerCmd.Dispose();
         }
 
         await using var cmd = new SqlCommand("INSERT INTO Teachers VALUES (@readerId, @passport)", 
@@ -153,9 +156,52 @@ public static class Readers
         return await cmd.ExecuteNonQueryAsync();
     }
 
+    private static async Task CheckPassport(ConnectionDb con, Teacher teacher)
+    {
+        await using var cmd =
+            new SqlCommand("SELECT * FROM [Teachers] WHERE (passport = @passport)",
+                con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("@passport", SqlDbType.NVarChar, 10) {Value = teacher.Passport});
+        var read = await cmd.ExecuteReaderAsync();
+        if (read.Read())
+        {
+            throw new Exception("Паспорт не может повторяться");
+        }
+    }
+
+    private static async Task CheckLogin(Reader reader)
+    {
+        using var con = await ConnectionDb.ConnectionDbAsync();
+        await using var cmd =
+            new SqlCommand("SELECT * FROM [Readers] WHERE (login = @login)",
+                con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("@login", SqlDbType.NVarChar, 50) {Value = reader.Login});
+        var read = await cmd.ExecuteReaderAsync();
+        if (read.Read())
+        {
+            throw new Exception("Такой логин уже существует");
+        }
+    }
+
+    private static async Task CheckPhone(Reader reader)
+    {
+        using var con = await ConnectionDb.ConnectionDbAsync();
+        await using var cmd =
+            new SqlCommand("SELECT * FROM [Readers] WHERE (phone = @phone)",
+                con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("@phone", SqlDbType.BigInt) {Value = reader.Phone});
+        var read = await cmd.ExecuteReaderAsync();
+        if (read.Read())
+        {
+            throw new Exception("Номер телефона уже существует");
+        }
+    }
+
     public static async Task<int> AddAsync(Reader reader)
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
+        await CheckLogin(reader);
+        await CheckPhone(reader);
         var cmd = await GetCommand(con);
         cmd.Parameters["@surname"].Value = reader.Surname;
         cmd.Parameters["@name"].Value = reader.Name;
