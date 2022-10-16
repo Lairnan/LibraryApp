@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Media.Imaging;
 
 namespace LibraryApp.Models;
 
@@ -17,4 +18,6 @@ public class Reader
     public string Login { get; set; }
     public string Password { get; set; }
     public string? Passport { get; set; }
+    public byte[]? Image { get; set; }
+    public Teacher? Teacher { get; set; }
 }

@@ -33,10 +33,11 @@ public static class Readers
 
     private static string GetString(string newQuery = "")
     {
-        const string query = "SELECT r.*, t.[name] as typeName, gn.name as gnName FROM [Readers] r" +
-                             " INNER JOIN Types T on T.id = r.typeid" +
-                             " INNER JOIN GroupsName gn on r.groupNameId = gn.id";
-        return query + newQuery;
+        const string query = "SELECT r.*, t.[name] as typeName, te.passport " +
+                             "FROM [Readers] r " +
+                             "INNER JOIN Types T on T.id = r.typeid " +
+                             "LEFT JOIN Teachers te on r.id = te.readerid";
+        return query + newQuery + " order by id";
     }
 
     private static Reader GetReader(IDataRecord reader)
@@ -48,14 +49,24 @@ public static class Readers
             Name = (string) reader["name"],
             Patronymic = (string) reader["patronymic"],
             Type = GetType(reader),
-            Group = (int)reader["group"],
-            GroupName = (string)reader["gnName"],
-            BirthDate = (DateTime)reader["birthdate"],
-            Address = (string)reader["address"],
-            Phone = (long)reader["phone"],
-            Login = (string)reader["login"],
-            Password = (string)reader["password"],
-            Passport = (string)reader["passport"]
+            Group = (int) reader["group"],
+            GroupName = (string) reader["groupName"],
+            BirthDate = (DateTime) reader["birthdate"],
+            Address = (string) reader["address"],
+            Phone = (long) reader["phone"],
+            Login = (string) reader["login"],
+            Password = (string) reader["password"],
+            Image = (byte[]) reader["image"],
+            Teacher = GetTeacher(reader)
+        };
+    }
+
+    private static Teacher GetTeacher(IDataRecord teacher)
+    {
+        return new Teacher
+        {
+            // Reader = GetReader(teacher),
+            Passport = (string) teacher["passport"],
         };
     }
 
@@ -71,46 +82,100 @@ public static class Readers
     public static int Add(Reader reader)
     {
         using var con = ConnectionDb.ConnectionDbAsync().Result;
-        const string query = "INSERT INTO Readers (surname, [name], patronymic, typeid, [group], " +
-                             "groupName, birthdate, [address], [login], [password], phone, passport) " +
-                             "VALUES " +
-                             "(@surname, @name, @patronymic, @type, @group, @groupName, @birthdate, @address, @login, @password, @phone, @passport)";
-        using var cmd = new SqlCommand(query, con.SqlConnection);
-        cmd.Parameters.Add(new SqlParameter("surname", SqlDbType.NVarChar, 30) {Value = reader.Surname});
-        cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 30) {Value = reader.Name});
-        cmd.Parameters.Add(new SqlParameter("patronymic", SqlDbType.NVarChar, 30) {Value = reader.Patronymic});
-        cmd.Parameters.AddWithValue("type", reader.Type.Id);
-        cmd.Parameters.AddWithValue("group", reader.Group);
-        cmd.Parameters.Add(new SqlParameter("groupName", SqlDbType.NVarChar, 1) {Value = reader.GroupName});
-        cmd.Parameters.AddWithValue("birthdate", reader.BirthDate);
-        cmd.Parameters.Add(new SqlParameter("address", SqlDbType.NVarChar, 50) {Value = reader.Address});
-        cmd.Parameters.Add(new SqlParameter("login", SqlDbType.NVarChar, 50) {Value = reader.Login});
-        cmd.Parameters.Add(new SqlParameter("password", SqlDbType.NVarChar, 50) {Value = reader.Password});
-        cmd.Parameters.AddWithValue("phone", reader.Phone);
-        cmd.Parameters.Add(new SqlParameter("passport", SqlDbType.NVarChar, 10) {Value = reader.Passport});
+        var cmd = GetCommand(con).Result;
+        cmd.Parameters["@surname"].Value = reader.Surname;
+        cmd.Parameters["@name"].Value = reader.Name;
+        cmd.Parameters["@patronymic"].Value = string.IsNullOrWhiteSpace(reader.Patronymic) 
+                ? DBNull.Value 
+                : reader.Patronymic;
+        cmd.Parameters["@typeid"].Value = reader.Type.Id;
+        cmd.Parameters["@group"].Value = reader.Group;
+        cmd.Parameters["@groupName"].Value = reader.GroupName;
+        cmd.Parameters["@birthdate"].Value = reader.BirthDate;
+        cmd.Parameters["@address"].Value = reader.Address;
+        cmd.Parameters["@login"].Value = reader.Login;
+        cmd.Parameters["@password"].Value = reader.Password;
+        cmd.Parameters["@phone"].Value = reader.Phone;
+        cmd.Parameters["@passport"].Value = string.IsNullOrWhiteSpace(reader.Passport) 
+            ? DBNull.Value 
+            : reader.Passport;
+        cmd.Parameters["@image"].Value = reader.Image == null 
+            ? DBNull.Value 
+            : reader.Image;
         return cmd.ExecuteNonQuery();
+    }
+
+    private static async Task<SqlCommand> GetCommand(ConnectionDb con)
+    {
+        const string query = "INSERT INTO Readers " +
+                             "(surname, [name], patronymic, typeid, [group], " +
+                             "groupName, birthdate, [address], [login], [password], phone, [image]) " +
+                             "VALUES " +
+                             "(@surname, @name, @patronymic, @typeid, @group, " +
+                             "@groupName, @birthdate, @address, @login, @password, @phone, @image)";
+        await using var cmd = new SqlCommand(query, con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("@surname", SqlDbType.NVarChar, 30));
+        cmd.Parameters.Add(new SqlParameter("@name", SqlDbType.NVarChar, 30));
+        cmd.Parameters.Add(new SqlParameter("@patronymic", SqlDbType.NVarChar, 30));
+        cmd.Parameters.Add(new SqlParameter("@typeid", SqlDbType.Int));
+        cmd.Parameters.Add(new SqlParameter("@group", SqlDbType.Int));
+        cmd.Parameters.Add(new SqlParameter("@groupName", SqlDbType.NVarChar, 1));
+        cmd.Parameters.Add(new SqlParameter("@birthdate", SqlDbType.Date));
+        cmd.Parameters.Add(new SqlParameter("@address", SqlDbType.NVarChar, 50));
+        cmd.Parameters.Add(new SqlParameter("@login", SqlDbType.NVarChar, 50));
+        cmd.Parameters.Add(new SqlParameter("@password", SqlDbType.NVarChar, 50));
+        cmd.Parameters.Add(new SqlParameter("@phone", SqlDbType.BigInt));
+        cmd.Parameters.Add(new SqlParameter("@passport", SqlDbType.NVarChar, 10));
+        cmd.Parameters.Add(new SqlParameter("@image", SqlDbType.Image));
+        return cmd;
+    }
+
+    public static async Task<int> AddTeacherAsync(Teacher teacher)
+    {
+        await AddAsync(teacher.Reader);
+        
+        using var con = await ConnectionDb.ConnectionDbAsync();
+        int readerId;
+        await using (var readerCmd = new SqlCommand(GetString(" where login = @login"),
+                         con.SqlConnection))
+        {
+            readerCmd.Parameters.AddWithValue("@login", teacher.Reader.Login);
+            readerId = (int) readerCmd.ExecuteScalar();
+        }
+
+        await using var cmd = new SqlCommand("INSERT INTO Teachers VALUES (@readerId, @passport)", 
+            con.SqlConnection);
+        cmd.Parameters.Add(new SqlParameter("@readerId", SqlDbType.Int)).Value = readerId;
+        cmd.Parameters.Add(new SqlParameter("@passport", SqlDbType.NVarChar, 10)).Value = 
+            string.IsNullOrWhiteSpace(teacher.Passport) 
+            ? DBNull.Value 
+            : teacher.Passport;
+        return await cmd.ExecuteNonQueryAsync();
     }
 
     public static async Task<int> AddAsync(Reader reader)
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
-        const string query = "INSERT INTO Readers (surname, [name], patronymic, typeid, [group], " +
-                             "groupName, birthdate, [address], [login], [password], phone, passport) " +
-                             "VALUES " +
-                             "(@surname, @name, @patronymic, @type, @group, @groupName, @birthdate, @address, @login, @password, @phone, @passport)";
-        await using var cmd = new SqlCommand(query, con.SqlConnection);
-        cmd.Parameters.Add(new SqlParameter("surname", SqlDbType.NVarChar, 30) {Value = reader.Surname});
-        cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 30) {Value = reader.Name});
-        cmd.Parameters.Add(new SqlParameter("patronymic", SqlDbType.NVarChar, 30) {Value = reader.Patronymic});
-        cmd.Parameters.AddWithValue("type", reader.Type.Id);
-        cmd.Parameters.AddWithValue("group", reader.Group);
-        cmd.Parameters.Add(new SqlParameter("groupName", SqlDbType.NVarChar, 1) {Value = reader.GroupName});
-        cmd.Parameters.AddWithValue("birthdate", reader.BirthDate);
-        cmd.Parameters.Add(new SqlParameter("address", SqlDbType.NVarChar, 50) {Value = reader.Address});
-        cmd.Parameters.Add(new SqlParameter("login", SqlDbType.NVarChar, 50) {Value = reader.Login});
-        cmd.Parameters.Add(new SqlParameter("password", SqlDbType.NVarChar, 50) {Value = reader.Password});
-        cmd.Parameters.AddWithValue("phone", reader.Phone);
-        cmd.Parameters.Add(new SqlParameter("passport", SqlDbType.NVarChar, 10) {Value = reader.Passport});
+        var cmd = await GetCommand(con);
+        cmd.Parameters["@surname"].Value = reader.Surname;
+        cmd.Parameters["@name"].Value = reader.Name;
+        cmd.Parameters["@patronymic"].Value = string.IsNullOrWhiteSpace(reader.Patronymic) 
+            ? DBNull.Value 
+            : reader.Patronymic;
+        cmd.Parameters["@typeid"].Value = reader.Type.Id;
+        cmd.Parameters["@group"].Value = reader.Group;
+        cmd.Parameters["@groupName"].Value = reader.GroupName;
+        cmd.Parameters["@birthdate"].Value = reader.BirthDate;
+        cmd.Parameters["@address"].Value = reader.Address;
+        cmd.Parameters["@login"].Value = reader.Login;
+        cmd.Parameters["@password"].Value = reader.Password;
+        cmd.Parameters["@phone"].Value = reader.Phone;
+        cmd.Parameters["@passport"].Value = string.IsNullOrWhiteSpace(reader.Passport) 
+            ? DBNull.Value 
+            : reader.Passport;
+        cmd.Parameters["@image"].Value = reader.Image == null 
+            ? DBNull.Value 
+            : reader.Image;
         return await cmd.ExecuteNonQueryAsync();
     }
 }

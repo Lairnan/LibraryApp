@@ -12,8 +12,8 @@ public class ConnectionDb : IDisposable
         await sqlConnection.OpenAsync();
         return new ConnectionDb(sqlConnection);
     }
-    
-    public ConnectionDb(SqlConnection sqlConnection)
+
+    private ConnectionDb(SqlConnection sqlConnection)
     {
         this.SqlConnection = sqlConnection;
     }

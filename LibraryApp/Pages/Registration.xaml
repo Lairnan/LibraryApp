@@ -113,6 +113,27 @@
                 Visibility="Collapsed"
                 Margin="2 3"
                 TabIndex="1"/>
+            <Label
+                Content="Добавьте изображение"
+                IsTabStop="False"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    x:Name="ImageBox"
+                    Margin="2 3"
+                    IsEnabled="False"
+                    TabIndex="1"/>
+                <Button
+                    x:Name="ImageBtn"
+                    Grid.Column="1"
+                    Margin="2 3"
+                    Content="Выбрать"
+                    TabIndex="1"
+                    Click="ImageBtn_OnClick"/>
+            </Grid>
         </UniformGrid>
         <UniformGrid
             Margin="0 5"

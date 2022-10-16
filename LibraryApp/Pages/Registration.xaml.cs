@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +10,8 @@ using System.Windows.Input;
 using LibraryApp.Items;
 using LibraryApp.Models;
 using LibraryApp.Windows;
+using LibraryDialogForm;
+using ComboBoxItem = LibraryDialogForm.ComboBoxItem;
 
 namespace LibraryApp.Pages;
 
@@ -108,7 +112,6 @@ public partial class Registration : Page
         {
             var surname = SurBox.Text.Trim();
             var name = NameBox.Text.Trim();
-            var patronymic = PatBox.Text.Trim();
             var type = Types[TypeBox.SelectedIndex];
             var group = int.Parse(GroupBox.Text.Trim());
             var groupName = ((TextBlock)GroupName.Items[GroupName.SelectedIndex]).Text.Trim();
@@ -117,17 +120,34 @@ public partial class Registration : Page
             var login = LogBox.Text.Trim();
             var password = PassBox.Password.Trim();
             var phone = long.Parse(PhoneBox.Text.Trim());
+            string? patronymic = null;
+            string? image = null;
             string? passport = null;
-            if(PassportBox.Visibility == Visibility.Visible)
-                passport= PassportBox.Text;
+            if (!string.IsNullOrWhiteSpace(PatBox.Text))
+            {
+                patronymic = PatBox.Text;
+            }
+            if (!string.IsNullOrWhiteSpace(ImageBox.Text))
+            {
+                image = ImageBox.Text;
+            }
+            if (PassportBox.Visibility == Visibility.Visible)
+            {
+                passport = PassportBox.Text.Replace(' ', '\0');
+                if (passport.Length != 10)
+                {
+                    MessageBox.Show("Введите корректно серию и номер паспорта");
+                    return;
+                }
+            }
 
-            if (string.IsNullOrWhiteSpace(surname) | string.IsNullOrWhiteSpace(name) | string.IsNullOrWhiteSpace(patronymic) | 
+            if (string.IsNullOrWhiteSpace(surname) | string.IsNullOrWhiteSpace(name) | 
                 string.IsNullOrWhiteSpace(group.ToString()) | string.IsNullOrWhiteSpace(groupName) | 
                 string.IsNullOrWhiteSpace(birthdate.ToString("dd.MM.yyyy")) | 
                 string.IsNullOrWhiteSpace(address) | 
                 string.IsNullOrWhiteSpace(login) | 
                 string.IsNullOrWhiteSpace(password) |
-                string.IsNullOrWhiteSpace(phone.ToString()) | (passport != null && string.IsNullOrWhiteSpace(passport)))
+                string.IsNullOrWhiteSpace(phone.ToString()))
             {
                 MessageBox.Show("Поля не могут быть пустыми");
             }
@@ -146,8 +166,18 @@ public partial class Registration : Page
                     Login = login,
                     Password = password,
                     Phone = phone,
-                    Passport = passport
+                    Image = image.ToByte()
                 };
+                if (passport != null)
+                {
+                    var teacher = new Teacher
+                    {
+                        Reader = reader,
+                        Passport = passport
+                    };
+                    if (await CheckLog(teacher.Reader, teacher)) return;
+                }
+
                 if (await CheckLog(reader)) return;
             }
         }
@@ -159,7 +189,7 @@ public partial class Registration : Page
         CaptchaGenerate();
     }
 
-    private async Task<bool> CheckLog(Reader reader)
+    private async Task<bool> CheckLog(Reader reader, Teacher? teacher = null)
     {
         using var con = await ConnectionDb.ConnectionDbAsync();
         await using var cmd =
@@ -167,11 +197,10 @@ public partial class Registration : Page
                            " OR (login = @login)",
                 con.SqlConnection);
             
-        cmd.Parameters.AddWithValue("surname", reader.Surname);
-        cmd.Parameters.AddWithValue("name", reader.Name);
-        cmd.Parameters.AddWithValue("patronymic", reader.Patronymic);
-        cmd.Parameters.AddWithValue("login", reader.Login);
-        cmd.Parameters.AddWithValue("password", reader.Password);
+        cmd.Parameters.Add(new SqlParameter("surname", SqlDbType.NVarChar, 30) {Value = reader.Surname});
+        cmd.Parameters.Add(new SqlParameter("name", SqlDbType.NVarChar, 30) {Value = reader.Name});
+        cmd.Parameters.Add(new SqlParameter("patronymic", SqlDbType.NVarChar, 30) {Value = reader.Patronymic});
+        cmd.Parameters.Add(new SqlParameter("login", SqlDbType.NVarChar, 50) {Value = reader.Login});
             
         var read = await cmd.ExecuteReaderAsync();
         if (await read.ReadAsync())
@@ -179,7 +208,10 @@ public partial class Registration : Page
             MessageBox.Show("Данный пользователь уже существует");
         }
 
-        await Readers.AddAsync(reader);
+        if (teacher != null)
+            await Readers.AddTeacherAsync(teacher);
+        else
+            await Readers.AddAsync(reader);
         MessageBox.Show("Вы успешно зарегистрировались");
         _pageService.Start();
         return true;
@@ -203,5 +235,17 @@ public partial class Registration : Page
                 PassportLab.Visibility = Visibility.Visible;
                 break;
         }
+    }
+
+    private void ImageBtn_OnClick(object sender, RoutedEventArgs e)
+    {
+        var file = new OpenFileDialogNew();
+        file.FilterItems.Add(new ComboBoxItem
+        {
+            Name = "image",
+            Filter = "*.jpg;*.jpeg;*.png;*.bmp"
+        });
+        file.ShowDialog();
+        ImageBox.Text = file.FileName;
     }
 }
