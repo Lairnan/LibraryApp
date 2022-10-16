@@ -36,7 +36,7 @@ public static class Readers
         const string query = "SELECT r.*, t.[name] as typeName, te.passport " +
                              "FROM [Readers] r " +
                              "INNER JOIN Types T on T.id = r.typeid " +
-                             "LEFT JOIN Teachers te on r.id = te.readerid";
+                             "LEFT JOIN Teachers te on r.id = te.readerid ";
         return query + newQuery + " order by id";
     }
 
@@ -138,7 +138,7 @@ public static class Readers
         await CheckPassport(con, teacher);
         await AddAsync(teacher.Reader);
         int readerId;
-        await using (var readerCmd = new SqlCommand(GetString(" where login = @login"),
+        await using (var readerCmd = new SqlCommand(GetString("where login = @login"),
                          con.SqlConnection))
         {
             readerCmd.Parameters.AddWithValue("@login", teacher.Reader.Login);
